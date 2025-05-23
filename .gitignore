@@ -1,0 +1,28 @@
+# environment settings
+.env
+
+# django
+*.sqlite3
+
+# virtual env
+env/
+*.pyo
+*.pyd
+
+# python
+*.pyc
+__pycache__/
+
+
+# static, media
+staticfiles/
+media/
+
+# vs code
+.vscode/
+.idea/
+*.swap
+
+# windows system files
+.DS_Store
+Thumbs.db
