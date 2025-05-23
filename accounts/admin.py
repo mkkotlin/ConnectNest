@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from accounts.models import CustomUser
+from accounts.models import CustomUser, Profile
 
 # Register your models here.
 
@@ -14,3 +14,7 @@ class CustomUserAdmin(UserAdmin):
     list_filter = ('is_staff', 'is_active', 'is_social_user')
     search_fields = ('email', 'username')
     ordering = ('email',)
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'bio']

@@ -17,6 +17,7 @@ __pycache__/
 # static, media
 staticfiles/
 media/
+profiles/
 
 # vs code
 .vscode/
