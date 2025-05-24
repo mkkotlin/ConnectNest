@@ -11,5 +11,5 @@ class CustomUserRegistrationForm(UserCreationForm):
         fields = ('username', 'email', 'password1', 'password2',)
 
 class CustomLoginForm(AuthenticationForm):
-    username = forms.CharField(label='Email / Username',)
+    username = forms.CharField(label='Username',)
     password = forms.CharField(widget=forms.PasswordInput)

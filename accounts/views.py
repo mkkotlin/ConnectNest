@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from accounts.forms import CustomUserRegistrationForm, CustomLoginForm
 from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
 
 # Create your views here.
 
@@ -8,10 +9,12 @@ from django.contrib.auth import login, authenticate, logout
 def UserRegister(request):
     if request.method == 'POST':
         form = CustomUserRegistrationForm(request.POST)
+        print('req.post')
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('dashboard')
+            messages.success(request, "You are registered")
+            return redirect('dashboard',)
     else:
         form = CustomUserRegistrationForm()
         return render(request, 'accounts/register.html', {'form': form})
@@ -22,6 +25,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            messages.success(request, "You are logged in")
             return redirect('dashboard')
     else:
         form = CustomLoginForm()
