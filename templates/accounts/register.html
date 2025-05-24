@@ -1,8 +1,17 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
+<div>
 <h2>Register</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p}}
-    <button type="submit">Sign up</button>
-</form>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button type="submit">Sign up</button>
+        {% if messages %}
+        {% for message in messages %}
+        <div>
+            {{message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </form>
+</div>
