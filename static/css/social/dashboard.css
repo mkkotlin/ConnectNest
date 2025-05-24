@@ -30,3 +30,11 @@ li a:hover:not(.active) {
 .active {
   background-color: #04AA6D;
 }
+
+img{
+    border-radius: 50%;
+    height: 200px;
+    width: 200px;
+    border: 2px dotted;
+    object-fit: cover;
+}
