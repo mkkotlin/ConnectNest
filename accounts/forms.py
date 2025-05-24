@@ -8,13 +8,18 @@ class CustomUserRegistrationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password1', 'password2',)
+        fields = (
+            "username",
+            "email",
+            "password1",
+            "password2",
+        )
 
         help_texts = {
-            'username':None,
-            'email':None,
-            'password1':'',
-            'password2': None,
+            "username": None,
+            "email": None,
+            "password1": "",
+            "password2": None,
         }
 
         def __init__(self, *args, **kwargs):
@@ -24,5 +29,7 @@ class CustomUserRegistrationForm(UserCreationForm):
 
 
 class CustomLoginForm(AuthenticationForm):
-    username = forms.CharField(label='Username',)
+    username = forms.CharField(
+        label="Username",
+    )
     password = forms.CharField(widget=forms.PasswordInput)
