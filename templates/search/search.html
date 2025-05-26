@@ -1,0 +1,87 @@
+<div>
+{% extends 'nav.html' %}
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% block content %}
+<div style="margin: 100px 20px; display: flex; justify-content: center; align-items: flex-start;">
+    <div class="search-box">
+        <input type="search" placeholder="search" id="search-input">
+        <!-- <span>&#128269;</span> -->
+        <button style="font-size:24px" id="search-btn" onclick="search()"><i class="fa fa-search"></i></button>
+    </div>
+</div>
+<!--start search profile -->
+<div style="margin: 0px 20px;">
+    <hr>
+    <div class="profile-search">
+        <div id="design" style="display: flex; align-items: center;">
+            <img alt="ok" id="search-pic" style="margin-right: 5px;">
+            <span style="margin-left: 5px;">name</span>
+        </div>
+        <div>
+            <button style="font-size: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                <span style="margin-right: auto;">Add request</span>
+                <i class="fa fa-plus-square-o"></i>
+            </button>   
+        </div>
+    </div>
+</div>
+
+<!-- end of search profile -->
+<script>
+    function search(){
+        alert('sr btn')
+    }
+</script>
+
+<style>
+    #design{
+        display: inline-flex;
+        justify-content: flex-start;
+        align-content: flex-start;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+    }
+    #search-pic{
+        height: 70px;
+        width: 70px;
+        border-radius: 0;
+        background-color: aquamarine;
+        border: 1px solid black;
+    }
+    .profile-search{
+        border: 2px solid black;
+        width:250px;
+        display: inline-block;
+    }
+    #search-btn{
+        background-color: white;
+        border: none;
+    }
+    .search-box {
+        border: 2px solid red;
+        height: 20px;
+        width: fit-content;
+        align-items: center;
+        border-radius: 10px;
+        display: flex; /* Added to align items inside the search box */
+        padding: 10px; /* Added padding for better spacing */
+    }
+    #search-input {
+        appearance: none;
+        width: 300px;
+        border: none;
+        appearance: none;
+        outline: none;
+        margin-right: 10px; /* Added margin for spacing between input and icon */
+    }
+    input[type="search"]::-webkit-search-decoration,
+    input[type="search"]::-webkit-search-cancel-button,
+    input[type="search"]::-webkit-search-results-button,
+    input[type="search"]::-webkit-search-results-decoration {
+    -webkit-appearance:none;
+}
+</style>
+
+{% endblock %}
