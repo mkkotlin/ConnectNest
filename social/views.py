@@ -6,8 +6,6 @@ from django.http import JsonResponse, HttpResponse
 # Create your views here.
 @login_required
 def dashboard_view(request):
-
-    
     try:
         profile = Profile.objects.get(user = request.user)
     except Profile.DoesNotExist:
@@ -16,7 +14,7 @@ def dashboard_view(request):
     return render(request, "profiles/dashboard.html", {'profile':profile})
 
 
-
+@login_required
 def update_bio(request):
     if request.method == 'POST':
         bio = request.POST.get('bio')
@@ -26,7 +24,7 @@ def update_bio(request):
         return JsonResponse({'status':'success'}) #204 return empty page
     return JsonResponse({'status':'error'})
 
-
+@login_required
 def update_pic(request):
     if request.method == 'POST':
         profile_pic = request.FILES.get('profile_pic')  # Correct: get file from FILES
