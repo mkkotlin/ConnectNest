@@ -6,33 +6,35 @@
 <div style="margin: 100px 20px; display: flex; justify-content: center; align-items: flex-start;">
     <div class="search-box">
         <input type="search" placeholder="search" id="search-input">
-        <!-- <span>&#128269;</span> -->
-        <button style="font-size:24px" id="search-btn" onclick="search()"><i class="fa fa-search"></i></button>
+        <button style="font-size:24px" id="search-btn"><i class="fa fa-search"></i></button>
     </div>
 </div>
+<hr>
+<div id="results" style="margin-top: 20px; text-align: center;"></div>
 <!--start search profile -->
-<div style="margin: 0px 20px;">
-    <hr>
-    <div class="profile-search">
-        <div id="design" style="display: flex; align-items: center;">
-            <img alt="ok" id="search-pic" style="margin-right: 5px;">
-            <span style="margin-left: 5px;">name</span>
-        </div>
-        <div>
-            <button style="font-size: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                <span style="margin-right: auto;">Add request</span>
-                <i class="fa fa-plus-square-o"></i>
-            </button>   
+<!-- Template container (hidden) -->
+<div id="search-template" style="display: none;">
+    <div style="margin: 0px 20px;">
+        
+        <div class="profile-search" style="margin: 10px;">
+            <div id="design" style="display: flex; align-items: center;">
+                <img alt="ok" id="search-pic" style="margin-right: 5px;">
+                <span style="margin-left: 5px;">name</span>
+            </div>
+            <div>
+                <button style="font-size: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="margin-right: auto;">Add request</span>
+                    <i class="fa fa-plus-square-o"></i>
+                </button>   
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Actual result container -->
+<div id="results"></div>
 <!-- end of search profile -->
-<script>
-    function search(){
-        alert('sr btn')
-    }
-</script>
+
 
 <style>
     #design{
@@ -83,5 +85,62 @@
     -webkit-appearance:none;
 }
 </style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    let timeout = null;
+
+    $('#search-input').keyup(function(){
+        clearTimeout(timeout);
+        const query = $(this).val().trim();
+
+        if (query.length === 0) {
+            $('#results').html('');
+            return;
+        }
+
+        timeout = setTimeout(() => {
+            $.ajax({
+                type: "GET",
+                url: "{% url 'filter_s' %}",
+                data: { q: query },
+                success: function(response){
+                    const resultsContainer = $('#results');
+                    resultsContainer.empty();
+                    // console.log(response) //to check response
+                    if (response.results.length === 0) {
+                        resultsContainer.html('<p style="margin: 20px;">No results found</p>');
+                        return;
+                    }
+
+                    response.results.forEach(user => {
+                        // Clone the template
+                        const clone = $('#search-template > div').clone();
+
+                        // Update the clone content
+                        clone.find('#search-pic').attr('src', user.profile_pic);
+                        clone.find('#design span').text(user.username);
+
+                        //button enable on id
+                        if (user.id === response.curr_user){
+                            clone.find('button').hide();
+                        }
+                        // console.log(user.id, response.curr_user)
+                        // animation test
+                        clone.hide()
+
+                        // Append to result container
+                        resultsContainer.append(clone);
+                        // clone.fadeIn(300);
+                        clone.slideDown(100);
+                    });
+                }
+            });
+        }, 1000);
+    });
+});
+</script>
+
 
 {% endblock %}
