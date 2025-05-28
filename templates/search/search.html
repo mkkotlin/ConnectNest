@@ -142,11 +142,9 @@ $(document).ready(function(){
  
 });
    // Add friend
-   function al(){
-    alert('bbbb')
-   }
-    $('button').on('click',function(){
-        al();
+    $(document).on('click','#add-frq',function(){
+        alert('frq')
+        $(this).text('req sent, cancle req')
     })
 </script>
 
