@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "accounts.apps.AccountsConfig",
     "social",
-    "search"
+    "search",
+    "friendRequest"
 ]
 
 MIDDLEWARE = [
