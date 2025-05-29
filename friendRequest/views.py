@@ -13,13 +13,13 @@ def sendFrq(request, username):
         return JsonResponse({'error': 'something went wrong'})
     
     friend_request, created = FriendRequest.objects.get_or_create(from_user=request.user, to_user=to_user)
-
+    print(friend_request.id)
     if not created:
-        messages.info(request, 'Aleady sent')
+        # messages.info(request, 'Aleady sent')
+        return JsonResponse({'status':'Alrady sent'})
     else:
-        messages.success(request, 'Request sent')
-
-    return JsonResponse({'status':'ok'})
+        # messages.success(request, 'Request sent')
+        return JsonResponse({'status':'sent'})
 
 
 def acceptRequest(request, request_id):
