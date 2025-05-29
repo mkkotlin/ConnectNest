@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
-from accounts.views import login_view
+from accounts.views import login_view, profile_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -27,4 +27,5 @@ urlpatterns = [
     path("social/", include("social.urls")),
     path("", login_view, name="home"),
     path("search/", include("search.urls")),
+    path("user/<str:username>/", profile_view, name = 'profile_view')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

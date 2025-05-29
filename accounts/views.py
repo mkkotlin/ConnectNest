@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from accounts.forms import CustomUserRegistrationForm, CustomLoginForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+from accounts.models import CustomUser, Profile
 
 # Create your views here.
 
@@ -43,3 +44,9 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("/")
+
+
+def profile_view(request, username):
+    user = get_object_or_404(CustomUser, username = username)
+    profile = get_object_or_404(Profile, user_id = user.id)
+    return render(request, "profiles/dashboard.html", {'user':user,'profile':profile})

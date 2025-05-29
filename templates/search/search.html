@@ -19,7 +19,9 @@
         <div class="profile-search" style="margin: 10px;">
             <div id="design" style="display: flex; align-items: center;">
                 <img alt="ok" id="search-pic" style="margin-right: 5px;">
-                <span style="margin-left: 5px;">name</span>
+                <a href="#" class="profile-link" style="text-decoration: none;">
+                <span style="margin-left: 5px; text-transform: capitalize;">name</span>
+                </a>
             </div>
             <div>
                 <button id="add-frq" style="font-size: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center;">
@@ -134,6 +136,7 @@ $(document).ready(function(){
                         resultsContainer.append(clone);
                         // clone.fadeIn(300);
                         clone.slideDown(100);
+                        clone.find('.profile-link').attr('href', '/user/'+user.username+'/')
                     });
                 }
             });
