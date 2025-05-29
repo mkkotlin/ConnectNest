@@ -9,17 +9,17 @@ from friendRequest.models import FriendRequest
 def sendFrq(request, username):
     to_user = get_object_or_404(CustomUser, username = username)    
     if request.user == to_user:
-        messages.error(request, "You can send to yourself")
-        return JsonResponse({'error': 'something went wrong'})
+        # messages.error(request, "You can send to yourself")
+        return JsonResponse({'error': 'You can send to yourself'})
     
     friend_request, created = FriendRequest.objects.get_or_create(from_user=request.user, to_user=to_user)
-    print(friend_request.id)
+    # print(friend_request.id)
     if not created:
         # messages.info(request, 'Aleady sent')
-        return JsonResponse({'status':'Alrady sent'})
+        return JsonResponse({'status':'Request alrady sent'})
     else:
         # messages.success(request, 'Request sent')
-        return JsonResponse({'status':'sent'})
+        return JsonResponse({'status':'Request sent'})
 
 
 def acceptRequest(request, request_id):

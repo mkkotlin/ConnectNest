@@ -133,13 +133,12 @@ $(document).ready(function(){
                         // animation test
                         clone.hide()
 
-                        // Append to result container
-                        // resultsContainer.append(clone);
-                        // clone.fadeIn(300);
+                        
                         clone.slideDown(100);
                         clone.find('.profile-link').attr('href', '/user/'+user.username+'/')
                         const reqUrl = `/friends/send/${user.username}/`;
                         clone.find('#add-frq').attr('data-url', reqUrl);
+                        // Append to result container
                         resultsContainer.append(clone);
                     });
                 }
@@ -159,7 +158,7 @@ $(document).ready(function(){
             type: 'GET',
             url:url,
             success: function(response){
-                alert(response.status || 'Request Sent')
+                alert(response.status || 'Request Sent');
             },
             error: function(xhr){
                 alert('something went wrong')
