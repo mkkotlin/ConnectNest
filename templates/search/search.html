@@ -138,6 +138,7 @@ $(document).ready(function(){
                         clone.find('.profile-link').attr('href', '/user/'+user.username+'/')
                         const reqUrl = `/friends/send/${user.username}/`;
                         clone.find('#add-frq').attr('data-url', reqUrl);
+                        clone.find('#add-frq').attr('class',user.username)
                         if(user.status == 'none'){
                             
                         }else if(user.status == 'pending'){
@@ -161,13 +162,14 @@ $(document).ready(function(){
     // Add friend
     $(document).on('click','#add-frq',function(){
         const url = $(this).data('url')
+        let class_name = $(this).attr('class')
         const action = $(this).data('action')
-        console.log(action,url)
         $.ajax({
             type: 'GET',
             url:url,
             success: function(response){
                 alert(response.status || 'Request Sent');
+                $('.'+class_name).text('Request sent')
             },
             error: function(xhr){
                 alert('something went wrong')
