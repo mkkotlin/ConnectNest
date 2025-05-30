@@ -9,7 +9,9 @@ from friendRequest.models import FriendRequest
 # Create your views here.
 @login_required
 def search(request):
-    return render(request, 'search/search.html')
+    pending_request = FriendRequest.objects.filter(to_user = request.user, status = 'pending')
+    print(pending_request)
+    return render(request, 'search/search.html',{'pending_request':pending_request})
 
 
 @login_required
@@ -76,3 +78,8 @@ def filter_s(request):
         'results': results,
         'curr_user': curr_user.id
     })
+
+
+def friend_request(request):
+    pending_request = FriendRequest.objects.filter(to_user = request.user, status = 'pending')
+    return JsonResponse({'pending_request':pending_request}, status = 204)
