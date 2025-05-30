@@ -38,7 +38,9 @@
 <!-- end of search profile -->
  <h1 style="margin: 10px;">pending</h1>
 {% for i in pending_request%}
-<div class="pending_container"><span class="pending_list">{{i.from_user}} sent you a friend request <a href="#" class="act" id="acc">[Accept]</a> <a href="#" class="act">[Reject]</a></span></div>
+<div class="pending_container"><span class="pending_list">{{i.from_user}} sent you a friend request 
+    <a href="#" class="act accept-btn" id="acc" data-id="{{i.id}}" data-action="accept">[Accept]</a> 
+    <a href="#" class="act reject-btn" data-id="{{i.id}}" data-action="reject">[Reject]</a></span></div>
 {% endfor %}
 
 <style>
@@ -189,6 +191,7 @@ $(document).ready(function(){
         const url = $(this).data('url')
         let class_name = $(this).attr('class')
         const action = $(this).data('action')
+        console.log(url)
         $.ajax({
             type: 'GET',
             url:url,
@@ -201,6 +204,26 @@ $(document).ready(function(){
             }
         })
     })
+
+// accept or reject request
+
+$(document).on('click','.accept-btn , .reject-btn', function(e){
+    e.preventDefault();
+    const requestId = $(this).data('id');
+    const action = $(this).data('action');
+    $.ajax({
+        url : `/friends/${action}/${requestId}/`,
+        type: 'POST',
+        data:{'csrfmiddlewaretoken':'{{csrf_token}}'},
+        success: function(response){
+            alert(response.message);
+            location.reload();
+        },
+        error: function(response){
+            alert('error')
+        }
+    })
+});
 </script>
 
 
