@@ -36,7 +36,7 @@
 <!-- Actual result container -->
 <div id="results"></div>
 <!-- end of search profile -->
- <h1 style="margin: 10px;">pending</h1>
+ <h1 style="margin: 10px;" class="pending">Notification</h1>
 {% for i in pending_request%}
 <div class="pending_container"><span class="pending_list">{{i.from_user}} sent you a friend request 
     <a href="#" class="act accept-btn" id="acc" data-id="{{i.id}}" data-action="accept">[Accept]</a> 
@@ -53,6 +53,7 @@
         padding: 10px;
         width:400px;
         margin: 5px;
+        display: none;
     }
     .pending_list{
         margin: 10px;
@@ -224,6 +225,12 @@ $(document).on('click','.accept-btn , .reject-btn', function(e){
         }
     })
 });
+
+// Toggle for notification
+$('.pending').click(function(){
+    $('.pending_container').toggle();
+    console.log('tt')
+})
 </script>
 
 
