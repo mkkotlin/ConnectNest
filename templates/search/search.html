@@ -36,12 +36,32 @@
 <!-- Actual result container -->
 <div id="results"></div>
 <!-- end of search profile -->
- <h1>pending</h1>
+ <h1 style="margin: 10px;">pending</h1>
 {% for i in pending_request%}
-<span>{{i.status}}</span>
+<div class="pending_container"><span class="pending_list">{{i.from_user}} sent you a friend request <a href="#" class="act" id="acc">[Accept]</a> <a href="#" class="act">[Reject]</a></span></div>
 {% endfor %}
 
 <style>
+    #acc{
+        color: green;
+    }
+    .pending_container{
+        border: 1px solid rgb(0, 4, 255);
+        border-radius: 10px;
+        padding: 10px;
+    }
+    .pending_list{
+        margin: 10px;
+    }
+    .act{
+        text-decoration: none;
+        color: red;
+        margin-left: 10px;
+        border: 2px solid black;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: blanchedalmond;
+    }
     #design{
         display: inline-flex;
         justify-content: flex-start;
