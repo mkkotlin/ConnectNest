@@ -110,7 +110,7 @@ $(document).ready(function(){
                 success: function(response){
                     const resultsContainer = $('#results');
                     resultsContainer.empty();
-                    // console.log(response) //to check response
+                    // console.log(response.results) //to check response
                     if (response.results.length === 0) {
                         resultsContainer.html('<p style="margin: 20px;">No results found</p>');
                         return;
@@ -119,7 +119,7 @@ $(document).ready(function(){
                     response.results.forEach(user => {
                         // Clone the template
                         const clone = $('#search-template > div').clone();
-
+                        
                         // Update the clone content
                         clone.find('#search-pic').attr('src', user.profile_pic);
                         clone.find('#design span').text(user.username);
@@ -138,6 +138,15 @@ $(document).ready(function(){
                         clone.find('.profile-link').attr('href', '/user/'+user.username+'/')
                         const reqUrl = `/friends/send/${user.username}/`;
                         clone.find('#add-frq').attr('data-url', reqUrl);
+                        if(user.status == 'none'){
+                            
+                        }else if(user.status == 'pending'){
+                            clone.find('#add-frq').text('Request pending')
+                        }else if(user.status == 'accepted'){
+                            clone.find('#add-frq').text('You are connected')
+                        }else if(user.status == 'rejected'){
+                            clone.find('#add-frq').text('Request rejected')
+                        }
                         // Append to result container
                         resultsContainer.append(clone);
                     });
