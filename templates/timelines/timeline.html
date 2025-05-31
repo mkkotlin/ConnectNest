@@ -1,0 +1,65 @@
+{% extends 'nav.html' %}
+
+
+{% block content %}
+<body>
+    <div class="body-container">
+        <p>ok</p> 
+        <div class="post-container">
+            <div class="post-info"></div>
+            <div class="img-cont-wrapper">
+                <div class="post-image">ksdfhdjsvjshdvbjdfsk</div>
+                <div class="post-content">djfhkjlehfchecvwiurybrye</div>
+            </div>
+            <div class="post-fotter"></div>
+        </div>
+    </div>    
+</body>
+<style>
+    body{   
+        margin-top: 50px;
+    }
+    .img-cont-wrapper{
+        display: flex;
+        border-bottom: 2px solid red;
+        height:65%
+    }
+    .post-content{
+        margin: 0px 5px 2px 5px;
+        border-bottom: 2px solid;
+        height: 100%;
+        width: 50%; 
+    }
+    .post-image{
+        margin: 0px 5px 2px 5px;
+        border-right: 2px dotted black;
+        border-bottom: 2px solid;
+        height: 100%;
+        width: 50%;
+    }
+    .post-info{
+        border: 1px solid black;
+        height: 20%;
+    }
+    .post-container{
+        border: 1px solid black;
+        height: 200px;
+        width: 50%;
+        justify-self: center;
+    }
+    .body-container{
+        text-align: justify;
+        border:2px solid rgb(255, 0, 0);
+        padding: 10px 20px 5px 20px;scroll-behavior: smooth;
+        height: 100%;
+        overflow: scroll;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        
+    }
+    ::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+</style>
+{% endblock %}
