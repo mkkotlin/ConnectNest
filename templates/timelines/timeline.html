@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
 <body>
@@ -93,7 +92,7 @@ $(document).ready(function() {
     $('.like-btn').click(function() {
         const postId = $(this).data('id');
         const likeBtn = $(this);
-        console.log(`/timeline/like_post/${postId}/`)
+        // console.log(`/timeline/like_post/${postId}/`)
         $.ajax({
             url: `/timeline/like_post/${postId}/`,
             type: 'POST',
@@ -108,7 +107,7 @@ $(document).ready(function() {
                     // Update like count
                     $(`#like-count-${postId}`).text(response.like_count);
                 } else {
-                    alert(response.message || 'Already liked.');
+                    // alert(response.message || 'Already liked.');
                 }
             }
         });
