@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "social",
     "search",
-    "friendRequest"
+    "friendRequest",
+    "timelines"
 ]
 
 MIDDLEWARE = [
