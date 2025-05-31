@@ -20,3 +20,8 @@ class LikeModel(models.Model):
         unique_together = ('user','post')
 
 
+class CommentModel(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name = 'comments')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
