@@ -14,7 +14,7 @@
         {% for p in post_data %}
         <div class="post-container">
             <div class="post-info">
-                <p>{{p.user}} shared a post.</p>
+                <p>{{p.user}} shared a post. {{p.id}}</p>
             </div>
             <div class="img-cont-wrapper">
                 {% if p.image %}
@@ -23,9 +23,9 @@
                 <div class="post-content"><span style="color: rgb(13, 0, 255); text-decoration: underline;">About Post</span><br> {{p.content}}</div>
             </div>
             <div class="post-footer">
-                <span id="like-btn" class="glyphicon" style='font-size:20px;'>&#xe125;</span>
-                <span id="comment-btn"><i class="material-icons" style='font-size:20px;'>chat_bubble_outline</i></span>
-                <span id="share-btn" class="glyphicon" style='font-size:20px;'>&#xe066;</span>
+                <span class="like-btn glyphicon" style="font-size:20px;" data-id="{{ p.id }}">&#xe125;</span>
+                <span class="comment-btn"><i class="material-icons" style="font-size:20px;">chat_bubble_outline</i></span>
+                <span class="share-btn glyphicon" style="font-size:20px;">&#xe066;</span>
             </div>
         </div>
         {% endfor %}
@@ -87,4 +87,32 @@
     background: transparent;  /* Optional: just make scrollbar invisible */
 }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.like-btn').click(function() {
+        const postId = $(this).data('id');
+        const likeBtn = $(this);
+        console.log(`/timeline/like_post/${postId}/`)
+        $.ajax({
+            url: `/timeline/like_post/${postId}/`,
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Optionally change icon color or style
+                    likeBtn.css('color', 'red');
+
+                    // Update like count
+                    $(`#like-count-${postId}`).text(response.like_count);
+                } else {
+                    alert(response.message || 'Already liked.');
+                }
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

@@ -20,7 +20,6 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from accounts.views import login_view, profile_view
-from timelines.views import timeline
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -30,5 +29,5 @@ urlpatterns = [
     path("search/", include("search.urls")),
     path("user/<str:username>/", profile_view, name = 'profile_view'),
     path('friends/', include('friendRequest.urls')),
-    path('timeline/', timeline, name = 'timeline')
+    path('timeline/',include('timelines.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
