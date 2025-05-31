@@ -3,42 +3,49 @@
 
 {% block content %}
 <body>
-    <div class="body-container">
-        <p>ok</p> 
+    <div class="body-container"> 
+        {% for p in post_data %}
         <div class="post-container">
             <div class="post-info"></div>
             <div class="img-cont-wrapper">
-                <div class="post-image">ksdfhdjsvjshdvbjdfsk</div>
-                <div class="post-content">djfhkjlehfchecvwiurybrye</div>
+                {% if p.image %}
+                <img class="post-image" src="{{p.image.url}}">
+                {% endif %}
+                <div class="post-content"><span style="color: rgb(13, 0, 255); text-decoration: underline;">About Post</span><br> {{p.content}}</div>
             </div>
             <div class="post-fotter"></div>
         </div>
+        {% endfor %}
     </div>    
 </body>
 <style>
     body{   
         margin-top: 50px;
     }
+    img{
+        border: none;
+    }
     .img-cont-wrapper{
         display: flex;
-        border-bottom: 2px solid red;
+        border-bottom: 3px solid rgb(115, 0, 255);
         height:65%
     }
     .post-content{
-        margin: 0px 5px 2px 5px;
-        border-bottom: 2px solid;
-        height: 100%;
-        width: 50%; 
-    }
-    .post-image{
-        margin: 0px 5px 2px 5px;
-        border-right: 2px dotted black;
-        border-bottom: 2px solid;
+        margin: 0px 5px 2px 0px;
         height: 100%;
         width: 50%;
+        /* border-left: 3px solid red;  */
+    }
+    .post-image{
+        margin: 0px 5px 2px 0px;
+        height: 100%;
+        width: 50%;
+        border-radius: 0;
+        object-fit: fill;
+        border-right: 3px solid rgb(255, 0, 0);
     }
     .post-info{
-        border: 1px solid black;
+        border-bottom: 3px solid rgb(255, 0, 0);
         height: 20%;
     }
     .post-container{
@@ -46,6 +53,7 @@
         height: 200px;
         width: 50%;
         justify-self: center;
+        margin-bottom: 20px;
     }
     .body-container{
         text-align: justify;
@@ -54,8 +62,7 @@
         height: 100%;
         overflow: scroll;
         overflow-x: hidden;
-        scroll-behavior: smooth;
-        
+        scroll-behavior: smooth;      
     }
     ::-webkit-scrollbar {
     width: 0px;  /* Remove scrollbar space */
