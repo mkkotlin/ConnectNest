@@ -1,19 +1,32 @@
 {% extends 'nav.html' %}
 
-
 {% block content %}
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  </head>
 <body>
     <div class="body-container"> 
         {% for p in post_data %}
         <div class="post-container">
-            <div class="post-info"></div>
+            <div class="post-info">
+                <p>{{p.user}} shared a post.</p>
+            </div>
             <div class="img-cont-wrapper">
                 {% if p.image %}
                 <img class="post-image" src="{{p.image.url}}">
                 {% endif %}
                 <div class="post-content"><span style="color: rgb(13, 0, 255); text-decoration: underline;">About Post</span><br> {{p.content}}</div>
             </div>
-            <div class="post-fotter"></div>
+            <div class="post-footer">
+                <span id="like-btn" class="glyphicon" style='font-size:20px;'>&#xe125;</span>
+                <span id="comment-btn"><i class="material-icons" style='font-size:20px;'>chat_bubble_outline</i></span>
+                <span id="share-btn" class="glyphicon" style='font-size:20px;'>&#xe066;</span>
+            </div>
         </div>
         {% endfor %}
     </div>    
@@ -24,6 +37,11 @@
     }
     img{
         border: none;
+    }
+    .post-footer{
+        display: flex;
+        justify-content: space-between;
+        padding: 2px 5px 0px 5px;
     }
     .img-cont-wrapper{
         display: flex;
