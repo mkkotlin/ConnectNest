@@ -26,18 +26,33 @@
             
             <div class="post-footer">
                 {% if p.id in is_liked %}
-                <span class="like-btn glyphicon" style="font-size:20px; color:red" data-id="{{ p.id }}">&#xe125;<span id="l-count-{{p.id}}" style="margin-left: 10px;"> {{p.like_count}}Likes</span></span>
+                <span class="like-btn glyphicon" style="font-size:20px; color:red" data-id="{{ p.id }}">&#xe125;<span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> {{p.like_count}}Likes</span></span>
                 {% else %}
-                <span class="like-btn glyphicon" style="font-size:20px; color:rgb(0, 0, 0)"  data-id="{{ p.id }}">&#xe125;<span id="l-count-{{p.id}}" style="margin-left: 10px;"> {{p.like_count}}Likes</span></span>
+                <span class="like-btn glyphicon" style="font-size:20px; color:rgb(0, 0, 0)"  data-id="{{ p.id }}">&#xe125;<span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> {{p.like_count}}Likes</span></span>
                 {% endif %}
-                <span class="comment-btn"><i class="material-icons" style="font-size:20px;">chat_bubble_outline</i></span>
-                <span class="share-btn glyphicon" style="font-size:20px;">&#xe066;</span>
+                <span class="comment-btn"><i class="material-icons" style="font-size:20px;">chat_bubble_outline</i><span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> Comments</span></span>
+                <span class="share-btn glyphicon" style="font-size:20px;">&#xe066;<span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> Shares</span></span>
             </div>
         </div>
         {% endfor %}
     </div>    
 </body>
 <style>
+    .comment-btn{
+        display: flex;
+        flex-wrap: nowrap;
+        align-content: stretch;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+    }
+    .share-btn{
+        font-size: 20px;
+        display: flex;
+        flex-direction: column;
+        align-content: stretch;
+        align-items: flex-end;
+    }
     body{   
         margin-top: 50px;
     }
@@ -74,7 +89,7 @@
     }
     .post-container{
         border: 1px solid black;
-        height: 200px;
+        height: 260px;
         width: 50%;
         justify-self: center;
         margin-bottom: 20px;
