@@ -31,7 +31,7 @@
                 <span class="like-btn glyphicon" style="font-size:20px; color:rgb(0, 0, 0)"  data-id="{{ p.id }}">&#xe125;<span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> {{p.like_count}}Likes</span></span>
                 {% endif %}
                 <span class="comment-btn"><i class="material-icons" style="font-size:20px;">chat_bubble_outline</i><span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> Comments</span></span>
-                <span class="share-btn glyphicon" style="font-size:20px;">&#xe066;<span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> Shares</span></span>
+                <span data-id="{{p.id}}" class="share-btn glyphicon" style="font-size:20px;">&#xe066;<span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> Shares</span></span>
             </div>
         </div>
         {% endfor %}
@@ -145,5 +145,26 @@ $(document).ready(function() {
         });
     });
 });
+</script>
+<script>
+    document.querySelectorAll('.share-btn').forEach(button=>{
+        button.addEventListener('click', function(){
+            const postId = this.getAttribute('data-id');
+            const shareUrl =`${window.location.origin}/timeline/post/${postId}`;
+
+            if(navigator.share){
+                navigator.share({
+                    title: 'check out post',
+                    url: shareUrl
+                }).then(()=>{
+                    console.log(shareUrl)
+                }).catch(console.error);
+            }else{
+                navigator.clipboard.writeText(shareUrl).then(()=>{
+                    alert("linked copied")
+                })
+            }
+        })
+    });
 </script>
 {% endblock %}
