@@ -30,14 +30,34 @@
                 {% else %}
                 <span class="like-btn glyphicon" style="font-size:20px; color:rgb(0, 0, 0)"  data-id="{{ p.id }}">&#xe125;<span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> {{p.like_count}}Likes</span></span>
                 {% endif %}
-                <span class="comment-btn"><i class="material-icons" style="font-size:20px;">chat_bubble_outline</i><span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> Comments</span></span>
+                <span data-id="hide" class="comment-btn" id="{{p.id}}"><i class="material-icons" style="font-size:20px;">chat_bubble_outline</i><span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> Comments</span></span>
                 <span data-id="{{p.id}}" class="share-btn glyphicon" style="font-size:20px;">&#xe066;<span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> Shares</span></span>
             </div>
+            <div class="comment-box" id="box-{{p.id}}">
+                <button id="close-btn">close</button>
+                <hr style="margin-top: 0px; margin-bottom: 0px; border-top: 3px solid #d12020;">
+                ok
+            </div>
         </div>
+        
         {% endfor %}
     </div>    
+
+    
 </body>
 <style>
+    #close-btn{
+        width: 100%;
+    }
+    .comment-box{
+        height: 350px;
+        width: 100%;
+        border: 2px solid black;
+        display:none;
+        background-color: rgb(255, 255, 255);
+        z-index: 10;
+        position: relative;
+    }
     .comment-btn{
         display: flex;
         flex-wrap: nowrap;
@@ -111,6 +131,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
+    // like logic
     $('.like-btn').click(function() {
         const postId = $(this).data('id');
         const likeBtn = $(this);
@@ -144,6 +165,17 @@ $(document).ready(function() {
             }
         });
     });
+    // comment logic
+    $('.comment-btn').click(function(){
+        let ids = $(this).attr('id');
+        $('#box-'+ids).toggle();
+        
+        
+    });
+    // $(document).on('click', function(){
+    //     $('.comment-box').hide()
+    //     console.log('hide')
+    // });
 });
 </script>
 <script>
