@@ -8,6 +8,12 @@ class PostModel(models.Model):
     image = models.ImageField(upload_to='posts/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def like_count(self):
+        return self.likes.count()
+    
+    def is_liked_by(self, user):
+        return self.likes.filter(user=user).exists()
+
     def __str__(self):
         return f"{self.user.username} post_{self.id}"
     

@@ -21,8 +21,15 @@
                 {% endif %}
                 <div class="post-content"><span style="color: rgb(13, 0, 255); text-decoration: underline;">About Post</span><br> {{p.content}}</div>
             </div>
+            
+                
+            
             <div class="post-footer">
-                <span class="like-btn glyphicon" style="font-size:20px;" data-id="{{ p.id }}">&#xe125;</span>
+                {% if p.id in is_liked %}
+                <span class="like-btn glyphicon" style="font-size:20px; color:red" data-id="{{ p.id }}">&#xe125;<span id="l-count-{{p.id}}" style="margin-left: 10px;"> {{p.like_count}}Likes</span></span>
+                {% else %}
+                <span class="like-btn glyphicon" style="font-size:20px; color:rgb(0, 0, 0)"  data-id="{{ p.id }}">&#xe125;<span id="l-count-{{p.id}}" style="margin-left: 10px;"> {{p.like_count}}Likes</span></span>
+                {% endif %}
                 <span class="comment-btn"><i class="material-icons" style="font-size:20px;">chat_bubble_outline</i></span>
                 <span class="share-btn glyphicon" style="font-size:20px;">&#xe066;</span>
             </div>
@@ -102,12 +109,22 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     // Optionally change icon color or style
-                    likeBtn.css('color', 'red');
-
+                    
+                    likeBtn.attr('data-like',response.liked)
+                   
                     // Update like count
-                    $(`#like-count-${postId}`).text(response.like_count);
+                    $(`#l-count-${postId}`).text(''+response.l_count+'Likes');
+                    let s = likeBtn.data('like')
+            
+                    if (response.liked === false){
+                        likeBtn.css('color', 'black');
+                    }
+                    if (response.liked ===true){
+                        likeBtn.css('color', 'red');
+                    }
                 } else {
-                    // alert(response.message || 'Already liked.');
+                    alert(response.message || 'Already liked.');
+                    likeBtn.css('color', 'black');
                 }
             }
         });
