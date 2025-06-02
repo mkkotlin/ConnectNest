@@ -36,7 +36,7 @@
             <div class="comment-box" id="box-{{p.id}}">
                 <button id="close-btn">close</button>
                 <hr style="margin-top: 0px; margin-bottom: 0px; border-top: 3px solid #d12020;">
-                <div id="comment-list" style="padding: 5px; height: 84%;">
+                <div class="cmt-{{p.id}}" id="comment-list" style="padding: 5px; height: 84%;overflow-x: scroll;">
                     {% for comment in p.comments.all %}
                         <p>{{comment.user}}: {{comment.content}}</p>
                     {% endfor %}
@@ -196,8 +196,8 @@ $(document).ready(function() {
             success: function(response){
                 console.log('added')
                 $('#coment-'+ids).val('')
-                // const newComt = `<p>username: comment</p>`;
-                // $('#box-'+postId).find('#comment-list').append(newComt)
+                // location.reload()
+                $('.cmt-'+ids).append(`<p>${response.user}: ${response.content}</p>`)
             },
             error: function(response){
                 alert('Failed to post comment')
