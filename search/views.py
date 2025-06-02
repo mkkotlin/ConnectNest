@@ -42,7 +42,7 @@ def result(request):
 def filter_s(request):
     q = request.GET.get('q', '')
     curr_user = request.user
-    matched_users = CustomUser.objects.filter(Q(username__icontains=q)).exclude(id=curr_user.id)[:10]
+    matched_users = CustomUser.objects.filter(Q(username__icontains=q))#.exclude(id=curr_user.id)[:10]
 
     results = []
     for user in matched_users:

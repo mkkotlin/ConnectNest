@@ -36,7 +36,15 @@
             <div class="comment-box" id="box-{{p.id}}">
                 <button id="close-btn">close</button>
                 <hr style="margin-top: 0px; margin-bottom: 0px; border-top: 3px solid #d12020;">
-                <div style="padding: 5px;">ok</div>
+                <div id="comment-list" style="padding: 5px; height: 84%;">
+                    {% for comment in p.comments.all %}
+                        <p>{{comment.user}}: {{comment.content}}</p>
+                    {% endfor %}
+                </div>
+                <div class="footer" data-id="{{user}}">
+                    <input class="clear" id="coment-{{p.id}}" type="text" placeholder="type comment" style="width: 93%;margin-left: 2px;">
+                    <button class="{{p.id}}" data-id="{{p.id}}">➡️</button>
+                </div>
             </div>
         </div>
         
@@ -168,14 +176,37 @@ $(document).ready(function() {
     // comment logic
     $('.comment-btn').click(function(){
         let ids = $(this).attr('id');
+        console.log(ids)
         $('#box-'+ids).toggle();
-        
-        
+    // Add comment to post    
+        $('.'+ids).click(function(){
+        let comment = $('#coment-'+ids).val()
+        let username  = $('.footer').data('id')
+        $.ajax({
+            url: '/timeline/add_comment/',
+            type: 'POST',
+            data:{
+                'content':comment,
+                'user': username,
+                'post':ids
+            },
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            success: function(response){
+                console.log('added')
+                $('#coment-'+ids).val('')
+                // const newComt = `<p>username: comment</p>`;
+                // $('#box-'+postId).find('#comment-list').append(newComt)
+            },
+            error: function(response){
+                alert('Failed to post comment')
+            },
+        });
     });
-    // $(document).on('click', function(){
-    //     $('.comment-box').hide()
-    //     console.log('hide')
-    // });
+    });
+    
+
 });
 </script>
 <script>
