@@ -1,0 +1,242 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/social/dashboard.css' %}">
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+<!-- navigation tab -->
+
+<ul>
+  <li><a class="active" href="#">Dashboard</a></li>
+  <li><a href="{% url 'timeline' %}">Timeline</a></li>
+  <li><a href="{% url 'search' %}">search & connect</a></li>
+  <li><a href="#notification">Notification</a></li>
+  <li><a href="{% url 'logout' %}">logout</a></li>
+</ul>
+
+<div style="padding:20px;margin-top:30px;height:1500px;">
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{message}}</p>
+        {% endfor %}
+    {% endif %}
+    <!--strat of  profile section pic and bio -->
+    <div class="profile-container">
+        {% if profile.profile_pic %}
+        <!-- image section -->
+        <img src="{{ profile.profile_pic.url }}" alt="Profile Picture" class="profile-pic">
+        <span class="add-pic" >&#9998;</span>
+        <form method="post" id="pic-form">
+            {% csrf_token %}
+            <label for="upload-pic" id="select_img" style="display: none;">Select an image</label>
+            <input id="upload-pic" type="file" accept="image/*" oninput="prev.src=window.URL.createObjectURL(this.files[0])" style="display:none" >
+            <img id="prev" src="#" style="display: none; width: 300px;height: 200px; border-radius: 0%; border: none; display: none;">
+            <button id="save_image" type="submit" style="display: none;">save</button>
+        </form>
+        {% else %}
+        <img src=""  class="profile-pic">
+        <span class="add-pic" >&#9998;</span>
+        <form method="post" id="pic-form">
+            {% csrf_token %}
+            <label for="upload-pic" id="select_img" style="display: none;">Select an image</label>
+            <input id="upload-pic" type="file" accept="image/*" oninput="prev.src=window.URL.createObjectURL(this.files[0])" style="display:none" >
+            <img id="prev" src="#" style="display: none; width: 300px;height: 200px; border-radius: 0%; border: none; display: none;">
+            <button id="save_image" type="submit" style="display: none;">save</button>
+        </form>
+        {% endif %}
+        <hr style="background-color: rgb(152, 152, 161); height: 1px;">
+        <!-- user name display -->
+        <h2>{{user.username}}</h2>
+        <!-- bio update section -->
+        <form id="bio-form" method="post">
+            {% csrf_token %}
+            <p id="bio-text">
+                Bio: <span id="change-bio">{{ profile.bio }}</span>
+                <!-- edit icon -->
+                <span id="edit-bio">&#9998;</span>
+            </p>
+            <input type="text" id="bio-input" name="bio" value="{{ profile.bio }}" style="display: none;">
+            <button type="submit" id="save-bio" style="display: none;">Save</button>
+        </form>
+    </div>
+    <!-- end of profile section pic and bio -->
+
+    <!-- create post -->
+    <h3 class="create-btn"><span class="create-post">Create post ⨁</span></h3>
+     <div class="post-box">
+        <div class="post-content">
+            <label id="ask-img" for="files">Add pic</label>
+            <input accept="image/*" type="file" id="files" style="display: none;"/>
+            <img class="prevs" id="image" style="display: none; border-radius: 0px;"/>
+            <textarea name="about-post" id="about-post" placeholder="About post/ thoughts"></textarea>  
+        </div>
+        <button class="post-timeline" style="width: 100%;">add to timeline/save</button>
+     </div>
+         
+</div>
+</body>
+</html>
+<style>
+    .prevs{
+        height: 200px;
+        width: 200px;
+        border: none;
+    }
+    #about-post{
+        width: 380px;
+        height: 200px;
+    }
+    .post-content{
+        border: 2px solid red;
+        width:max-content;
+        display: flex;
+        justify-content: space-between;
+        justify-items: center;
+        align-items: stretch;
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+    .post-box{
+        display:none;
+        border: 2px solid blue;
+        max-width: max-content;
+    }
+    .create-btn{
+        text-decoration: underline;
+    }
+    .create-post:hover{
+        cursor: pointer;
+        color: blue;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        
+//start of for propile/ pic upload
+        $('.add-pic').click(function(){
+            $('#select_img').show();
+            $('.add-pic').hide();
+            
+        })
+        $('#select_img').click(function(){
+            $('#prev').show();
+            $('#save_image').show();
+        })
+        // saving to db using ajax
+       $('#pic-form').submit(function(e){
+    e.preventDefault();  // prevent normal form submission
+
+    const formData = new FormData();
+    formData.append('profile_pic', $('#upload-pic')[0].files[0]);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+    $.ajax({
+        url: "{% url 'update_pic' %}",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response){
+            if(response.status === 'success') {
+                $('.profile-pic').attr('src', response.new_profile_pic_url);
+                $('#prev').hide();
+                $('#save_image').hide();
+                $('#select_img').hide();
+                $('.add-pic').show();
+                alert("Profile picture updated successfully!");
+            }
+        },
+        error:function(){
+            console.log('Upload failed');
+        }
+    });
+});
+
+
+// end of profile/ pic upload
+
+        // Show input and save button on edit
+        $('#edit-bio').click(function () {
+            $('#bio-text').hide();
+            $('#bio-input').show();
+            $('#save-bio').show();
+        });
+
+        // Submit form via AJAX
+        $('#bio-form').submit(function (e) {
+            e.preventDefault();  // Prevent default form submission
+            const updatedBio = $('#bio-input').val();
+            $.ajax({
+                url: "{% url 'update_bio' %}",
+                type: "POST",
+                data: {
+                    'bio': updatedBio,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    if (response.status === 'success') {
+                        $('#change-bio').text(updatedBio);
+                        $('#bio-text').show();
+                        $('#bio-input').hide();
+                        $('#save-bio').hide();
+                        alert("Bio updated successfully!");
+                    } else {
+                        alert("Failed to update bio.");
+                    }
+                },
+                error: function () {
+                    alert("Error occurred while saving bio.");
+                }
+            });
+        });
+    });
+
+    $('.create-post').click(function () {
+        $('.post-box').toggle();
+    });
+    $('#ask-img').click(function(){
+        $('#image').toggle()
+    });
+    $('.post-timeline').click(function(){
+        let formData = new FormData();
+        formData.append("img", $('#files')[0].files[0])
+        formData.append("content", $('#about-post').val())
+        let isEmpty = [...formData.entries()].length === 0;
+        console.log([...formData.entries()].length )
+        if (isEmpty){
+            alert('post can not be empty')
+        }else{
+        $.ajax({
+            url: "/timeline/post_post/",
+            type: 'POST',
+            data:formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            processData: false,
+            contentType: false,
+            success: function(response){
+                alert(response.status)
+            },
+            error:function(response){
+                alert(response.status)
+            }
+        });}
+    });
+</script>
+<script>
+    document.getElementById('files').onchange = function () {
+  var src = URL.createObjectURL(this.files[0])
+  document.getElementById('image').src = src
+}
+</script>
