@@ -114,23 +114,34 @@ GitHub: @mkkotlin
 > ✅ **Screenshots**
 
 ```markdown
-
 ## 🖼️ Preview
 
 ### 🔐 Login Page
-![Login](z_project_screenshots/login_page.png)
+![Login Page](screenshots/login_page.png)
 
 ### 📝 Register Page
-![Register](z_project_screenshots/register_user.png)
+![Register Page](screenshots/register_user.png)
 
-### 👤 Dashboard / Profile
-![Dashboard](z_project_screenshots/dashboard_or_profile_page.png)
+### 👤 Dashboard / Profile Page
+![Dashboard or Profile](screenshots/dashboard_or_profile_page.png)
 
 ### 🔍 Search & Notifications
-![Search and Notifications](z_project_screenshots/search_and_notification.png)
+![Search and Notification](screenshots/search_and_notofication.png)
 
-### ➕ Create Post Page
-![Create Post](z_project_screenshots/create_post.png)
+### 🧾 Notification Requests
+![Notification Requests](screenshots/notification_requests.png)
+
+### 🗨️ Comment Box
+![Comment Box](screenshots/comment_box.png)
 
 ### 📰 Timeline View
-![Timeline](z_project_screenshots/timeline_page.png)
+![Timeline Page](screenshots/timeline_page.png)
+
+### ➕ Create Post
+![Create Post](screenshots/create_post.png)
+
+### 🔗 Share Feature
+![Share Feature](screenshots/share.png)
+
+### 📁 Project Directory Structure
+![Project Directory](screenshots/project_directory_or_structures.png)
