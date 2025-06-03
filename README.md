@@ -81,27 +81,24 @@ Explore the admin panel at /admin/
 
 ---
 
-##📬 Contributing
+## 📬 Contributing
 Pull requests are welcome! If you’d like to help:
-
 Fork the repo
-
 Create a feature branch (git checkout -b feature/your-feature)
-
 Commit your changes
-
 Push to your fork
-
 Open a pull request 🚀
+
 ---
 
 
-##📄 License
+## 📄 License
 ⚠️ No license specified yet.
 For public use and contributions, it's recommended to add an MIT License or similar.
+
 ---
 
-##👤 Author
+## 👤 Author
 GitHub: @mkkotlin
 📬 Feel free to connect for feedback, ideas, or collaboration!
 
