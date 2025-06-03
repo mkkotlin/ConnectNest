@@ -100,6 +100,7 @@ Open a pull request 🚀
 
 ## 📄 License
 ⚠️ No license specified yet.
+
 For public use and contributions, it's recommended to add an MIT License or similar.
 
 ---
