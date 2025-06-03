@@ -111,7 +111,26 @@ GitHub: @mkkotlin
 
 
 
-> ✅ **Next Step Suggestion**: Add a `preview.png` or screenshots inside a `/screenshots/` folder and update the README with actual image paths like:
+> ✅ **Screenshots**
 
 ```markdown
-![Homepage Preview](screenshots/home.png)
+
+## 🖼️ Preview
+
+### 🔐 Login Page
+![Login](z_project_screenshots/login_page.png)
+
+### 📝 Register Page
+![Register](z_project_screenshots/register_user.png)
+
+### 👤 Dashboard / Profile
+![Dashboard](z_project_screenshots/dashboard_or_profile_page.png)
+
+### 🔍 Search & Notifications
+![Search and Notifications](z_project_screenshots/search_and_notification.png)
+
+### ➕ Create Post Page
+![Create Post](z_project_screenshots/create_post.png)
+
+### 📰 Timeline View
+![Timeline](z_project_screenshots/timeline_page.png)
