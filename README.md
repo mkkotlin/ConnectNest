@@ -113,7 +113,7 @@ GitHub: @mkkotlin
 
 > ✅ **Screenshots**
 
-```markdown
+
 ## 🖼️ Preview
 
 ### 🔐 Login Page
