@@ -51,3 +51,15 @@ def add_comment(request):
         return JsonResponse({'status':'success', 'user':comment.user.username, 'content': comment.content})
     except PostModel.DoesNotExist:
         return JsonResponse({'status':'error', 'message': 'post not found'})
+    
+def post_post(request):
+    if request.method == 'POST':
+        images = request.FILES.get('img', None)
+        contents = request.POST.get('content')
+        if images == None and contents == '':
+            return JsonResponse({'status':'Post is empty'})
+        else:
+            post = PostModel.objects.create(user=request.user,
+                                            content = contents, 
+                                            image = images)
+            return JsonResponse({'status':'created post'})
