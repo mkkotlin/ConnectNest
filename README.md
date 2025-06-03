@@ -83,11 +83,17 @@ Explore the admin panel at /admin/
 
 ## 📬 Contributing
 Pull requests are welcome! If you’d like to help:
+
 Fork the repo
+
 Create a feature branch (git checkout -b feature/your-feature)
+
 Commit your changes
+
 Push to your fork
+
 Open a pull request 🚀
+
 
 ---
 
