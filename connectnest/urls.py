@@ -29,5 +29,6 @@ urlpatterns = [
     path("search/", include("search.urls")),
     path("user/<str:username>/", profile_view, name = 'profile_view'),
     path('friends/', include('friendRequest.urls')),
-    path('timeline/',include('timelines.urls'))
+    path('timeline/',include('timelines.urls')),
+    path('ai-search/', include('ai_search.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

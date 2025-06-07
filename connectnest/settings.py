@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     "social",
     "search",
     "friendRequest",
-    "timelines"
+    "timelines",
+    "ai_search"
 ]
 
 MIDDLEWARE = [
