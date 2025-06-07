@@ -7,6 +7,11 @@ from timelines.models import PostModel
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
+
+def s_v(request):
+    return render(request, 'ai_search/results.html')
+
+
 def ai_search_view(request):
     query = request.GET.get('q', '')
     results = []
@@ -23,4 +28,4 @@ def ai_search_view(request):
 
         sorted_posts = sorted(scored_posts, key=lambda x: x[1], reverse=True)
 
-        return render(request, 'ai_search/results.html',{'results':results,'query':query})
+    return render(request, 'ai_search/results.html',{'results':results,'query':query})

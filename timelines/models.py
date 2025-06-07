@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 class PostModel(models.Model):
@@ -7,6 +8,7 @@ class PostModel(models.Model):
     content = models.TextField(blank=True)
     image = models.ImageField(upload_to='posts/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    embedding = ArrayField(models.FloatField(), blank=True, null=True)
 
     def like_count(self):
         return self.likes.count()
