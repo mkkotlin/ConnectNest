@@ -9,17 +9,6 @@
 
 ---
 
-## 🖼️ Preview
-
-> *Screenshots coming soon!*
-
-You can include:
-- 📸 Homepage screenshot  
-- 👥 Friend request UI  
-- 📝 Timeline post example  
-- ⚙️ Admin dashboard
-
----
 
 ## 🚀 Features
 
