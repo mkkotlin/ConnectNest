@@ -7,9 +7,7 @@
 
 **ConnectNest** is a Django-based social networking web application where users can connect, share posts, manage friendships, and explore content with a simple and clean interface.
 
----
 
----
 
 ## 🚀 Features
 
