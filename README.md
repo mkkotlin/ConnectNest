@@ -33,6 +33,7 @@ You can include:
 ---
 
 ## 📁 Project Structure
+```
 ConnectNest/
 ├── accounts/ # User login, register, and profile logic
 ├── ai_search/ # AI search integration (placeholder)
@@ -43,7 +44,7 @@ ConnectNest/
 ├── static/ # CSS, JS, and images
 ├── manage.py # Django project entry point
 └── requirements.txt # List of Python dependencies
-
+```
 
 
 ---
