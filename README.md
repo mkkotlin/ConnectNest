@@ -15,7 +15,7 @@
 - 👤 User Registration & Authentication
 - 🤝 Friend Request System
 - 📝 Timeline & Post Sharing
-- 💬 Like & Comment Support *(coming soon)*
+- 💬 Like & Comment Support 
 - 🔍 AI-Powered Search *(experimental)*
 - 🛠 Django Admin Control Panel
 
@@ -71,6 +71,7 @@ Explore the admin panel at /admin/
 
 ---
 
+
 ## 📬 Contributing
 Pull requests are welcome! If you’d like to help:
 
@@ -84,16 +85,9 @@ Push to your fork
 
 Open a pull request 🚀
 
-
 ---
 
 
-## 📄 License
-⚠️ No license specified yet.
-
-For public use and contributions, it's recommended to add an MIT License or similar.
-
----
 
 ## 👤 Author
 GitHub: @mkkotlin
