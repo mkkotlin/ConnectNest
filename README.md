@@ -9,11 +9,10 @@
 
 ---
 
-## 🖼️ Preview
+## 🖼️ Overview
 
-> *Screenshots coming soon!*
+> *Main fearures*
 
-You can include:
 - 📸 Homepage screenshot  
 - 👥 Friend request UI  
 - 📝 Timeline post example  
@@ -23,10 +22,10 @@ You can include:
 
 ## 🚀 Features
 
-- 👤 User Registration & Authentication
+- 👤 User Registration & Authentication (Custom Model)
 - 🤝 Friend Request System
 - 📝 Timeline & Post Sharing
-- 💬 Like & Comment Support *(coming soon)*
+- 💬 Like & Comment Support 
 - 🔍 AI-Powered Search *(experimental)*
 - 🛠 Django Admin Control Panel
 
