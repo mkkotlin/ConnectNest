@@ -9,15 +9,6 @@
 
 ---
 
-## 🖼️ Overview
-
-> *Main fearures*
-
-- 📸 Homepage screenshot  
-- 👥 Friend request UI  
-- 📝 Timeline post example  
-- ⚙️ Admin dashboard
-
 ---
 
 ## 🚀 Features
