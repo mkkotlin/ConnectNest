@@ -9,15 +9,26 @@
 
 ---
 
+## 🖼️ Preview
+
+> *Screenshots coming soon!*
+
+You can include:
+- 📸 Homepage screenshot  
+- 👥 Friend request UI  
+- 📝 Timeline post example  
+- ⚙️ Admin dashboard
+
+---
+
 ## 🚀 Features
 
-- 👤 User Registration & Authentication (Custom Model)
+- 👤 User Registration & Authentication
 - 🤝 Friend Request System
 - 📝 Timeline & Post Sharing
-- 💬 Like & Comment Support 
+- 💬 Like & Comment Support *(coming soon)*
 - 🔍 AI-Powered Search *(experimental)*
 - 🛠 Django Admin Control Panel
----
 
 ---
 
@@ -84,7 +95,15 @@ Push to your fork
 Open a pull request 🚀
 
 
+---
 
+
+## 📄 License
+⚠️ No license specified yet.
+
+For public use and contributions, it's recommended to add an MIT License or similar.
+
+---
 
 ## 👤 Author
 GitHub: @mkkotlin
