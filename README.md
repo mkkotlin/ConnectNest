@@ -93,12 +93,13 @@ Open a pull request 🚀
 GitHub: @mkkotlin
 📬 Feel free to connect for feedback, ideas, or collaboration!
 
+---
 
 
-> ✅ **Screenshots**
 
 
-## 🖼️ Preview
+
+## 🖼️ Screenshots
 
 ### 🔐 Login Page
 ![Login Page](screenshots/login_page.png)
