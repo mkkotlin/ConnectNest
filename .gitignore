@@ -27,3 +27,7 @@ media/
 # windows system files
 .DS_Store
 Thumbs.db
+
+
+# ignored app as experimental
+ai_search/
