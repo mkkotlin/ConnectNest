@@ -10,5 +10,4 @@ urlpatterns = [
     ),
     # path('login/', login_view, name = 'login'),
     path("logout/", logout_view, name="logout"),
-    path('accounts/user/<str:username>/', profile_view, name = 'profile_view')
 ]

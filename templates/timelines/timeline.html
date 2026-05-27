@@ -1,233 +1,539 @@
-{% extends 'nav.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline — ConnectNest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --accent:      #6f42c1;
+            --accent-dark: #5a32a3;
+            --accent-light:#ede9fb;
+            --bg:          #f0f2f5;
+            --surface:     #ffffff;
+            --border:      #e4e6ea;
+            --text:        #1c1e21;
+            --muted:       #65676b;
+            --liked:       #e53935;
+            --nav-h:       56px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 4px;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        nav .brand { font-size: 1.1rem; font-weight: 700; color: #fff; margin-right: auto; letter-spacing: .5px; }
+
+        nav a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: .88rem;
+            font-weight: 500;
+            padding: 7px 13px;
+            border-radius: 8px;
+            transition: background .18s, color .18s;
+        }
+
+        nav a:hover  { background: rgba(255,255,255,.1); color: #fff; }
+        nav a.active { background: var(--accent); color: #fff; }
+        nav a.logout { color: #f87171; }
+        nav a.logout:hover { background: rgba(248,113,113,.15); }
+
+        /* ── PAGE LAYOUT ── */
+        .page {
+            max-width: 600px;
+            margin: calc(var(--nav-h) + 24px) auto 60px;
+            padding: 0 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* ── POST CARD ── */
+        .post-card {
+            background: var(--surface);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0,0,0,.06);
+            overflow: hidden;
+        }
+
+        /* header */
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px 10px;
+        }
+
+        .post-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #9b59b6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .post-meta { flex: 1; min-width: 0; }
+
+        .post-author {
+            font-weight: 600;
+            font-size: .97rem;
+            color: var(--text);
+        }
+
+        .post-time {
+            font-size: .78rem;
+            color: var(--muted);
+            margin-top: 1px;
+        }
+
+        .delete-post-btn {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-size: 1.05rem;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 6px;
+            transition: all .2s;
+        }
+        .delete-post-btn:hover {
+            background: #ffebee;
+            color: #ef4444;
+        }
+
+        /* body */
+        .post-body {
+            padding: 0 16px 12px;
+            font-size: .97rem;
+            line-height: 1.55;
+            color: var(--text);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* image */
+        .post-img {
+            width: 100%;
+            max-height: 420px;
+            object-fit: cover;
+            display: block;
+            background: #eee;
+        }
+
+        /* divider */
+        .post-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0 16px;
+        }
+
+        /* action bar */
+        .post-actions {
+            display: flex;
+            padding: 4px 8px;
+            gap: 4px;
+        }
+
+        .action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 8px 4px;
+            border: none;
+            background: none;
+            border-radius: 8px;
+            font-size: .9rem;
+            font-family: inherit;
+            font-weight: 500;
+            color: var(--muted);
+            cursor: pointer;
+            transition: background .15s, color .15s;
+            user-select: none;
+        }
+
+        .action-btn:hover { background: var(--bg); color: var(--text); }
+
+        .action-btn.liked { color: var(--liked); }
+        .action-btn.liked:hover { background: #fdecea; }
+
+        .action-btn i { font-size: 1rem; }
+
+        /* ── COMMENT DRAWER ── */
+        .comment-drawer {
+            display: none;
+            flex-direction: column;
+            border-top: 1px solid var(--border);
+            background: #fafafa;
+        }
+
+        .comment-drawer.open { display: flex; }
+
+        .comment-list {
+            max-height: 220px;
+            overflow-y: auto;
+            padding: 12px 16px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .comment-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #9b59b6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: .75rem;
+            flex-shrink: 0;
+        }
+
+        .comment-bubble {
+            background: #ebebeb;
+            border-radius: 14px;
+            padding: 7px 12px;
+            font-size: .88rem;
+            line-height: 1.4;
+            max-width: 90%;
+        }
+
+        .comment-bubble strong { font-size: .85rem; display: block; margin-bottom: 2px; }
+
+        .comment-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .comment-input-row .comment-avatar { width: 34px; height: 34px; font-size: .8rem; }
+
+        .comment-input {
+            flex: 1;
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: .9rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color .2s;
+            background: #fff;
+        }
+
+        .comment-input:focus { border-color: var(--accent); }
+
+        .send-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: none;
+            background: var(--accent);
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .9rem;
+            transition: background .2s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover { background: var(--accent-dark); }
+
+        /* empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+            padding: 50px 20px;
+            color: var(--muted);
+        }
+
+        .empty-timeline i { font-size: 3rem; color: #ccc; margin-bottom: 15px; }
+        .empty-timeline h3 { color: var(--text); font-size: 1.2rem; margin-bottom: 5px; }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
 <body>
-    <div class="body-container"> 
-        {% for p in post_data %}
-        <div class="post-container">
-            <div class="post-info">
-                <p>{{p.user}} shared a post. {{p.id}}</p>
-            </div>
-            <div class="img-cont-wrapper">
+
+    {% include 'cn_nav.html' %}
+
+    <div class="page">
+
+        {% if post_data %}
+            {% for p in post_data %}
+            <div class="post-card">
+
+                <!-- Header -->
+                <div class="post-header" style="justify-content: space-between;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div class="post-avatar">{{ p.user.username|first|upper }}</div>
+                        <div class="post-meta">
+                            <div class="post-author">{{ p.user.username }}</div>
+                            <div class="post-time">{{ p.created_at|timesince }} ago</div>
+                        </div>
+                    </div>
+                    {% if p.user == request.user %}
+                    <button class="delete-post-btn" data-id="{{ p.id }}" title="Delete Post">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                    {% endif %}
+                </div>
+
+                <!-- Text content -->
+                {% if p.content %}
+                <div class="post-body">{{ p.content }}</div>
+                {% endif %}
+
+                <!-- Image -->
                 {% if p.image %}
-                <img class="post-image" src="{{p.image.url}}">
+                <img class="post-img" src="{{ p.image.url }}" alt="post image">
                 {% endif %}
-                <div class="post-content"><span style="color: rgb(13, 0, 255); text-decoration: underline;">About Post</span><br> {{p.content}}</div>
+
+                <!-- Action bar -->
+                <div class="post-divider"></div>
+                <div class="post-actions">
+                    <button class="action-btn like-btn {% if p.id in is_liked %}liked{% endif %}"
+                            data-id="{{ p.id }}">
+                        <i class="{% if p.id in is_liked %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
+                        <span class="like-label" id="l-count-{{ p.id }}">
+                            {{ p.like_count }} {% if p.like_count == 1 %}Like{% else %}Likes{% endif %}
+                        </span>
+                    </button>
+
+                    <button class="action-btn comment-btn" id="cmt-btn-{{ p.id }}" data-id="{{ p.id }}">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>Comment</span>
+                    </button>
+
+                    <button class="action-btn share-btn" data-id="{{ p.id }}">
+                        <i class="fa-solid fa-share-nodes"></i>
+                        <span>Share</span>
+                    </button>
+                </div>
+
+                <!-- Comment drawer -->
+                <div class="comment-drawer" id="drawer-{{ p.id }}">
+                    <div class="comment-list" id="cmt-list-{{ p.id }}">
+                        {% for comment in p.comments.all %}
+                        <div class="comment-item">
+                            <div class="comment-avatar">{{ comment.user.username|first|upper }}</div>
+                            <div class="comment-bubble">
+                                <strong>{{ comment.user.username }}</strong>
+                                {{ comment.content }}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p style="color:var(--muted); font-size:.88rem; text-align:center;">
+                            No comments yet. Be the first!
+                        </p>
+                        {% endfor %}
+                    </div>
+                    <div class="comment-input-row" data-id="{{ user }}">
+                        <div class="comment-avatar">{{ user.username|first|upper }}</div>
+                        <input class="comment-input" id="coment-{{ p.id }}"
+                               type="text" placeholder="Write a comment…">
+                        <button class="send-btn cmt-send" data-post="{{ p.id }}">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
             </div>
-            
+            {% endfor %}
+
+        {% else %}
+            <div class="empty-timeline">
+                <i class="fa-regular fa-newspaper"></i>
+                <h3>No posts yet</h3>
+                <p>Be the first to share something!</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+            // ── Like / unlike ──
+            $('.like-btn').click(function () {
+                const btn    = $(this);
+                const postId = btn.data('id');
+
+                $.ajax({
+                    url: `/timeline/like_post/${postId}/`,
+                    type: 'POST',
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                    success: function (res) {
+                        if (res.success) {
+                            const count = res.l_count;
+                            $(`#l-count-${postId}`).text(count + (count === 1 ? ' Like' : ' Likes'));
+
+                            if (res.liked) {
+                                btn.addClass('liked');
+                                btn.find('i').removeClass('fa-regular').addClass('fa-solid');
+                            } else {
+                                btn.removeClass('liked');
+                                btn.find('i').removeClass('fa-solid').addClass('fa-regular');
+                            }
+                        }
+                    }
+                });
+            });
+
+            // ── Delete Post ──
+            $(document).on('click', '.delete-post-btn', function (e) {
+                e.preventDefault();
+                console.log("Delete button clicked!");
+                const btn = $(this);
+                const postId = btn.data('id');
+                console.log("Post ID:", postId);
                 
-            
-            <div class="post-footer">
-                {% if p.id in is_liked %}
-                <span class="like-btn glyphicon" style="font-size:20px; color:red" data-id="{{ p.id }}">&#xe125;<span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> {{p.like_count}}Likes</span></span>
-                {% else %}
-                <span class="like-btn glyphicon" style="font-size:20px; color:rgb(0, 0, 0)"  data-id="{{ p.id }}">&#xe125;<span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> {{p.like_count}}Likes</span></span>
-                {% endif %}
-                <span data-id="hide" class="comment-btn" id="{{p.id}}"><i class="material-icons" style="font-size:20px;">chat_bubble_outline</i><span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> Comments</span></span>
-                <span data-id="{{p.id}}" class="share-btn glyphicon" style="font-size:20px;">&#xe066;<span id="l-count-{{p.id}}" style="display:table-cell;size: -8px;font-size: 14px;"> Shares</span></span>
-            </div>
-            <div class="comment-box" id="box-{{p.id}}">
-                <button id="close-btn">close</button>
-                <hr style="margin-top: 0px; margin-bottom: 0px; border-top: 3px solid #d12020;">
-                <div class="cmt-{{p.id}}" id="comment-list" style="padding: 5px; height: 84%;overflow-x: scroll;">
-                    {% for comment in p.comments.all %}
-                        <p>{{comment.user}}: {{comment.content}}</p>
-                    {% endfor %}
-                </div>
-                <div class="footer" data-id="{{user}}">
-                    <input class="clear" id="coment-{{p.id}}" type="text" placeholder="type comment" style="width: 93%;margin-left: 2px;">
-                    <button class="{{p.id}}" data-id="{{p.id}}">➡️</button>
-                </div>
-            </div>
-        </div>
-        
-        {% endfor %}
-    </div>    
-
-    
-</body>
-<style>
-    #close-btn{
-        width: 100%;
-    }
-    .comment-box{
-        height: 350px;
-        width: 100%;
-        border: 2px solid black;
-        display:none;
-        background-color: rgb(255, 255, 255);
-        z-index: 10;
-        position: relative;
-    }
-    .comment-btn{
-        display: flex;
-        flex-wrap: nowrap;
-        align-content: stretch;
-        justify-content: space-evenly;
-        align-items: center;
-        flex-direction: column;
-    }
-    .share-btn{
-        font-size: 20px;
-        display: flex;
-        flex-direction: column;
-        align-content: stretch;
-        align-items: flex-end;
-    }
-    body{   
-        margin-top: 50px;
-    }
-    img{
-        border: none;
-    }
-    .post-footer{
-        display: flex;
-        justify-content: space-between;
-        padding: 2px 5px 0px 5px;
-    }
-    .img-cont-wrapper{
-        display: flex;
-        border-bottom: 3px solid rgb(115, 0, 255);
-        height:65%
-    }
-    .post-content{
-        margin: 0px 5px 2px 0px;
-        height: 100%;
-        width: 50%;
-        /* border-left: 3px solid red;  */
-    }
-    .post-image{
-        margin: 0px 5px 2px 0px;
-        height: 100%;
-        width: 50%;
-        border-radius: 0;
-        object-fit: fill;
-        border-right: 3px solid rgb(255, 0, 0);
-    }
-    .post-info{
-        border-bottom: 3px solid rgb(255, 0, 0);
-        height: 20%;
-    }
-    .post-container{
-        border: 1px solid black;
-        height: 260px;
-        width: 50%;
-        justify-self: center;
-        margin-bottom: 20px;
-    }
-    .body-container{
-        text-align: justify;
-        border:2px solid rgb(255, 0, 0);
-        padding: 10px 20px 5px 20px;scroll-behavior: smooth;
-        height: 100%;
-        overflow: scroll;
-        overflow-x: hidden;
-        scroll-behavior: smooth;      
-    }
-    ::-webkit-scrollbar {
-    width: 0px;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
-}
-</style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    // like logic
-    $('.like-btn').click(function() {
-        const postId = $(this).data('id');
-        const likeBtn = $(this);
-        // console.log(`/timeline/like_post/${postId}/`)
-        $.ajax({
-            url: `/timeline/like_post/${postId}/`,
-            type: 'POST',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            success: function(response) {
-                if (response.success) {
-                    // Optionally change icon color or style
-                    
-                    likeBtn.attr('data-like',response.liked)
-                   
-                    // Update like count
-                    $(`#l-count-${postId}`).text(''+response.l_count+'Likes');
-                    let s = likeBtn.data('like')
-            
-                    if (response.liked === false){
-                        likeBtn.css('color', 'black');
-                    }
-                    if (response.liked ===true){
-                        likeBtn.css('color', 'red');
-                    }
-                } else {
-                    alert(response.message || 'Already liked.');
-                    likeBtn.css('color', 'black');
+                if (!confirm('Are you sure you want to delete this post?')) {
+                    console.log("User cancelled deletion.");
+                    return;
                 }
-            }
-        });
-    });
-    // comment logic
-    $('.comment-btn').click(function(){
-        let ids = $(this).attr('id');
-        console.log(ids)
-        $('#box-'+ids).toggle();
-    // Add comment to post    
-        $('.'+ids).click(function(){
-        let comment = $('#coment-'+ids).val()
-        let username  = $('.footer').data('id')
-        $.ajax({
-            url: '/timeline/add_comment/',
-            type: 'POST',
-            data:{
-                'content':comment,
-                'user': username,
-                'post':ids
-            },
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            success: function(response){
-                console.log('added')
-                $('#coment-'+ids).val('')
-                // location.reload()
-                $('.cmt-'+ids).append(`<p>${response.user}: ${response.content}</p>`)
-            },
-            error: function(response){
-                alert('Failed to post comment')
-            },
-        });
-    });
-    });
-    
+                
+                console.log("Sending AJAX request...");
+                $.ajax({
+                    url: `/timeline/delete/${postId}/`,
+                    type: 'POST',
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                    success: function (response) {
+                        console.log("AJAX success:", response);
+                        if (response.status === 'success') {
+                            btn.closest('.post-card').fadeOut(300, function () { $(this).remove(); });
+                            window.cnToast('✅ Post deleted!');
+                        } else {
+                            window.cnToast('❌ Failed to delete post.');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX error:", status, error, xhr.responseText);
+                        window.cnToast('❌ Error deleting post.');
+                    }
+                });
+            });
 
-});
-</script>
-<script>
-    document.querySelectorAll('.share-btn').forEach(button=>{
-        button.addEventListener('click', function(){
-            const postId = this.getAttribute('data-id');
-            const shareUrl =`${window.location.origin}/timeline/post/${postId}`;
+            // ── Toggle comment drawer ──
+            $(document).on('click', '.comment-btn', function () {
+                const postId  = $(this).data('id');
+                const drawer  = $(`#drawer-${postId}`);
+                drawer.toggleClass('open');
+                if (drawer.hasClass('open')) {
+                    $(`#coment-${postId}`).focus();
+                }
+            });
 
-            if(navigator.share){
-                navigator.share({
-                    title: 'check out post',
-                    url: shareUrl
-                }).then(()=>{
-                    console.log(shareUrl)
-                }).catch(console.error);
-            }else{
-                navigator.clipboard.writeText(shareUrl).then(()=>{
-                    alert("linked copied")
-                })
-            }
-        })
-    });
-</script>
-{% endblock %}
+            // ── Send comment ──
+            $(document).on('click', '.cmt-send', function () {
+                const postId  = $(this).data('post');
+                const input   = $(`#coment-${postId}`);
+                const content = input.val().trim();
+                if (!content) return;
+
+                $.ajax({
+                    url: '/timeline/add_comment/',
+                    type: 'POST',
+                    data: {
+                        'content': content,
+                        'post': postId
+                    },
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                    success: function (res) {
+                        const initial = res.user ? res.user[0].toUpperCase() : '?';
+                        const html = `
+                            <div class="comment-item">
+                                <div class="comment-avatar">${initial}</div>
+                                <div class="comment-bubble">
+                                    <strong>${res.user}</strong>${res.content}
+                                </div>
+                            </div>`;
+                        // Replace "no comments" placeholder if present
+                        $(`#cmt-list-${postId} p`).remove();
+                        $(`#cmt-list-${postId}`).append(html);
+                        input.val('');
+                        // Scroll to bottom of comment list
+                        const list = document.getElementById(`cmt-list-${postId}`);
+                        list.scrollTop = list.scrollHeight;
+                    },
+                    error: function () { window.cnToast('❌ Failed to post comment.'); }
+                });
+            });
+
+            // Allow Enter key to submit comment
+            $(document).on('keydown', '.comment-input', function (e) {
+                if (e.key === 'Enter') {
+                    $(this).closest('.comment-input-row').find('.cmt-send').click();
+                }
+            });
+
+            // ── Share ──
+            document.querySelectorAll('.share-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const postId   = this.getAttribute('data-id');
+                    const shareUrl = `${window.location.origin}/timeline/post/${postId}`;
+
+                    if (navigator.share) {
+                        navigator.share({ title: 'Check out this post on ConnectNest', url: shareUrl })
+                            .then(() => window.cnToast('✅ Shared successfully!'))
+                            .catch(console.error);
+                    } else {
+                        navigator.clipboard.writeText(shareUrl).then(() => {
+                            window.cnToast('🔗 Link copied to clipboard!');
+                        });
+                    }
+                });
+            });
+
+        });
+    </script>
+
+</body>
+</html>

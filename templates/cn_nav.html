@@ -1,0 +1,409 @@
+{% load static %}
+<!-- ═══════════════════════════════════════════════════════
+     Shared ConnectNest Navigation
+     Include this in every page that needs the nav bar.
+     Requires: jQuery already loaded on the page.
+     ═══════════════════════════════════════════════════════ -->
+<style>
+    /* ─── NAV GLOBAL ─── */
+    :root {
+        --accent: #6f42c1;
+        --accent-dark: #5a32a3;
+        --accent-light: #ede9fb;
+        --bg: #f0f2f5;
+        --surface: #ffffff;
+        --border: #e4e6ea;
+        --text: #1c1e21;
+        --muted: #65676b;
+        --nav-h: 56px;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    .cn-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--nav-h);
+        background: #1a1a2e;
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        gap: 4px;
+        z-index: 200;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+    }
+
+    .cn-nav .brand {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #fff;
+        margin-right: auto;
+        letter-spacing: .5px;
+        text-decoration: none;
+    }
+
+    .cn-nav a {
+        color: #ccc;
+        text-decoration: none;
+        font-size: .88rem;
+        font-weight: 500;
+        padding: 7px 13px;
+        border-radius: 8px;
+        transition: background .18s, color .18s;
+    }
+
+    .cn-nav a:hover {
+        background: rgba(255, 255, 255, .1);
+        color: #fff;
+    }
+
+    .cn-nav a.active {
+        background: var(--accent);
+        color: #fff;
+    }
+
+    .cn-nav a.logout {
+        color: #f87171;
+    }
+
+    .cn-nav a.logout:hover {
+        background: rgba(248, 113, 113, .15);
+    }
+
+    /* ─── NOTIFICATION BELL ─── */
+    .notif-wrap {
+        position: relative;
+    }
+
+    .notif-bell-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #ccc;
+        font-size: .88rem;
+        font-weight: 500;
+        padding: 7px 13px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: background .18s, color .18s;
+        font-family: inherit;
+    }
+
+    .notif-bell-btn:hover {
+        background: rgba(255, 255, 255, .1);
+        color: #fff;
+    }
+
+    .notif-count {
+        background: #ef4444;
+        color: #fff;
+        font-size: .68rem;
+        font-weight: 700;
+        padding: 1px 6px;
+        border-radius: 10px;
+        display: none;
+    }
+
+    .notif-count.visible {
+        display: inline-block;
+    }
+
+    /* ─── DROPDOWN ─── */
+    .notif-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        width: 320px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .14);
+        overflow: hidden;
+        z-index: 300;
+        animation: dropIn .18s ease;
+    }
+
+    @keyframes dropIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .notif-dropdown.open {
+        display: block;
+    }
+
+    .notif-dropdown-header {
+        padding: 12px 16px;
+        font-weight: 700;
+        font-size: .95rem;
+        color: var(--text);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .notif-empty {
+        padding: 24px 16px;
+        text-align: center;
+        color: var(--muted);
+        font-size: .9rem;
+    }
+
+    .notif-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        transition: background .12s;
+    }
+
+    .notif-item:last-child {
+        border-bottom: none;
+    }
+
+    .notif-item:hover {
+        background: #fafafa;
+    }
+
+    .notif-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), #9b59b6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: .9rem;
+        flex-shrink: 0;
+    }
+
+    .notif-text {
+        flex: 1;
+        font-size: .87rem;
+        color: var(--text);
+        line-height: 1.4;
+    }
+
+    .notif-text .notif-date {
+        font-size: .76rem;
+        color: var(--muted);
+        margin-top: 2px;
+    }
+
+    .notif-actions {
+        display: flex;
+        gap: 5px;
+        flex-shrink: 0;
+    }
+
+    .notif-action-btn {
+        padding: 5px 11px;
+        border: none;
+        border-radius: 7px;
+        font-size: .8rem;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        transition: opacity .15s;
+    }
+
+    .notif-action-btn:hover {
+        opacity: .85;
+    }
+
+    .notif-action-btn.accept {
+        background: #22c55e;
+        color: #fff;
+    }
+
+    .notif-action-btn.decline {
+        background: #f1f3f4;
+        color: var(--muted);
+    }
+
+    /* ─── TOAST ─── */
+    #cn-toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #1c1e21;
+        color: #fff;
+        padding: 11px 18px;
+        border-radius: 10px;
+        font-size: .9rem;
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity .3s, transform .3s;
+        pointer-events: none;
+        z-index: 9999;
+    }
+
+    #cn-toast.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+<nav class="cn-nav">
+    <a class="brand" href="{% url 'dashboard' %}">🌐 ConnectNest</a>
+    <a href="{% url 'dashboard' %}" {% if request.resolver_match.url_name == 'dashboard' %}class="active" {% endif %}>Dashboard</a>
+    <a href="{% url 'timeline' %}" {% if request.resolver_match.url_name == 'timeline' %}class="active" {% endif %}>Timeline</a>
+    <a href="{% url 'search' %}" {% if request.resolver_match.url_name == 'search' %}class="active" {% endif %}>Search</a>
+    <a href="{% url 'ai_search' %}" {% if request.resolver_match.url_name == 'ai_search' %}class="active" {% endif %}>🤖 AI</a>
+
+    <!-- Notification Bell -->
+    <div class="notif-wrap">
+        <button class="notif-bell-btn" id="cn-notif-btn" title="Notifications">
+            <i class="fa-regular fa-bell"></i>
+            Notifications
+            <span class="notif-count" id="cn-notif-count"></span>
+        </button>
+
+        <div class="notif-dropdown" id="cn-notif-dropdown">
+            <div class="notif-dropdown-header">
+                <span>Friend Requests</span>
+                <span id="cn-notif-label" style="color:var(--muted); font-size:.82rem; font-weight:400;"></span>
+            </div>
+            <div id="cn-notif-list">
+                <div class="notif-empty" id="cn-notif-empty">
+                    <i class="fa-regular fa-bell"
+                        style="font-size:1.6rem; display:block; margin-bottom:6px; color:#ccc;"></i>
+                    No new notifications
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a class="logout" href="{% url 'logout' %}">Logout</a>
+</nav>
+
+<div id="cn-toast"></div>
+
+<script>
+    (function () {
+        // ── Toast helper (global)
+        let cnToastTimeout;
+        window.cnToast = function (msg, ms = 2600) {
+            const t = document.getElementById('cn-toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            if (cnToastTimeout) clearTimeout(cnToastTimeout);
+            cnToastTimeout = setTimeout(() => t.classList.remove('show'), ms);
+        };
+
+        // ── Fetch & render notifications
+        function loadNotifications() {
+            fetch('/search/notifications/', { credentials: 'same-origin' })
+                .then(r => r.json())
+                .then(data => {
+                    const count = data.count;
+                    const badge = document.getElementById('cn-notif-count');
+                    const list = document.getElementById('cn-notif-list');
+                    const empty = document.getElementById('cn-notif-empty');
+                    const label = document.getElementById('cn-notif-label');
+
+                    // Badge
+                    badge.textContent = count;
+                    badge.classList.toggle('visible', count > 0);
+                    label.textContent = count > 0 ? `${count} pending` : '';
+
+                    // Clear old items (keep empty placeholder)
+                    list.querySelectorAll('.notif-item').forEach(el => el.remove());
+
+                    if (count === 0) {
+                        empty.style.display = '';
+                        return;
+                    }
+
+                    empty.style.display = 'none';
+
+                    data.notifications.forEach(n => {
+                        const item = document.createElement('div');
+                        item.className = 'notif-item';
+                        item.id = `cn-ni-${n.id}`;
+                        item.innerHTML = `
+                        <div class="notif-avatar">${n.from_user[0].toUpperCase()}</div>
+                        <div class="notif-text">
+                            <strong>${n.from_user}</strong> sent you a friend request
+                            <div class="notif-date">${n.created_at}</div>
+                        </div>
+                        <div class="notif-actions">
+                            <button class="notif-action-btn accept"  data-id="${n.id}" data-action="accept">Accept</button>
+                            <button class="notif-action-btn decline" data-id="${n.id}" data-action="reject">Decline</button>
+                        </div>`;
+                        list.appendChild(item);
+                    });
+                })
+                .catch(() => { });
+        }
+
+        // ── Toggle dropdown
+        document.getElementById('cn-notif-btn').addEventListener('click', function (e) {
+            e.stopPropagation();
+            const dd = document.getElementById('cn-notif-dropdown');
+            dd.classList.toggle('open');
+            if (dd.classList.contains('open')) loadNotifications();
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', function () {
+            document.getElementById('cn-notif-dropdown').classList.remove('open');
+        });
+
+        document.getElementById('cn-notif-dropdown').addEventListener('click', e => e.stopPropagation());
+
+        // ── Accept / Decline from nav
+        $('#cn-notif-dropdown').on('click', '.notif-action-btn', function (e) {
+            const btn = $(this);
+            const id = btn.data('id');
+            const action = btn.data('action');   // 'accept' or 'reject'
+
+            $.ajax({
+                url: `/friends/${action}/${id}/`,
+                type: 'POST',
+                data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+                success: function (response) {
+                    const item = document.getElementById(`cn-ni-${id}`);
+                    if (item) item.remove();
+                    loadNotifications();
+                    window.cnToast(action === 'accept' ? '✅ Request accepted!' : '❌ Request declined.');
+                },
+                error: function () {
+                    window.cnToast('❌ Error handling request.');
+                }
+            });
+        });
+
+        // Poll every 30s for new notifications
+        loadNotifications();
+        setInterval(loadNotifications, 30000);
+    })();
+</script>

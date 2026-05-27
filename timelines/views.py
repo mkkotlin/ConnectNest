@@ -63,3 +63,10 @@ def post_post(request):
                                             content = contents, 
                                             image = images)
             return JsonResponse({'status':'created post'})
+
+def delete_post(request, post_id):
+    if request.method == 'POST':
+        post = get_object_or_404(PostModel, id=post_id, user=request.user)
+        post.delete()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})

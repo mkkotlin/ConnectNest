@@ -1,242 +1,613 @@
 {% load static %}
-
-<link rel="stylesheet" href="{% static 'css/social/dashboard.css' %}">
-
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-</head>
-<body>
-<!-- navigation tab -->
+    <title>Dashboard — ConnectNest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<ul>
-  <li><a class="active" href="#">Dashboard</a></li>
-  <li><a href="{% url 'timeline' %}">Timeline</a></li>
-  <li><a href="{% url 'search' %}">search & connect</a></li>
-  <li><a href="#notification">Notification</a></li>
-  <li><a href="{% url 'logout' %}">logout</a></li>
-</ul>
-
-<div style="padding:20px;margin-top:30px;height:1500px;">
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{message}}</p>
-        {% endfor %}
-    {% endif %}
-    <!--strat of  profile section pic and bio -->
-    <div class="profile-container">
-        {% if profile.profile_pic %}
-        <!-- image section -->
-        <img src="{{ profile.profile_pic.url }}" alt="Profile Picture" class="profile-pic">
-        <span class="add-pic" >&#9998;</span>
-        <form method="post" id="pic-form">
-            {% csrf_token %}
-            <label for="upload-pic" id="select_img" style="display: none;">Select an image</label>
-            <input id="upload-pic" type="file" accept="image/*" oninput="prev.src=window.URL.createObjectURL(this.files[0])" style="display:none" >
-            <img id="prev" src="#" style="display: none; width: 300px;height: 200px; border-radius: 0%; border: none; display: none;">
-            <button id="save_image" type="submit" style="display: none;">save</button>
-        </form>
-        {% else %}
-        <img src=""  class="profile-pic">
-        <span class="add-pic" >&#9998;</span>
-        <form method="post" id="pic-form">
-            {% csrf_token %}
-            <label for="upload-pic" id="select_img" style="display: none;">Select an image</label>
-            <input id="upload-pic" type="file" accept="image/*" oninput="prev.src=window.URL.createObjectURL(this.files[0])" style="display:none" >
-            <img id="prev" src="#" style="display: none; width: 300px;height: 200px; border-radius: 0%; border: none; display: none;">
-            <button id="save_image" type="submit" style="display: none;">save</button>
-        </form>
-        {% endif %}
-        <hr style="background-color: rgb(152, 152, 161); height: 1px;">
-        <!-- user name display -->
-        <h2>{{user.username}}</h2>
-        <!-- bio update section -->
-        <form id="bio-form" method="post">
-            {% csrf_token %}
-            <p id="bio-text">
-                Bio: <span id="change-bio">{{ profile.bio }}</span>
-                <!-- edit icon -->
-                <span id="edit-bio">&#9998;</span>
-            </p>
-            <input type="text" id="bio-input" name="bio" value="{{ profile.bio }}" style="display: none;">
-            <button type="submit" id="save-bio" style="display: none;">Save</button>
-        </form>
-    </div>
-    <!-- end of profile section pic and bio -->
-
-    <!-- create post -->
-    <h3 class="create-btn"><span class="create-post">Create post ⨁</span></h3>
-     <div class="post-box">
-        <div class="post-content">
-            <label id="ask-img" for="files">Add pic</label>
-            <input accept="image/*" type="file" id="files" style="display: none;"/>
-            <img class="prevs" id="image" style="display: none; border-radius: 0px;"/>
-            <textarea name="about-post" id="about-post" placeholder="About post/ thoughts"></textarea>  
-        </div>
-        <button class="post-timeline" style="width: 100%;">add to timeline/save</button>
-     </div>
-         
-</div>
-</body>
-</html>
-<style>
-    .prevs{
-        height: 200px;
-        width: 200px;
-        border: none;
-    }
-    #about-post{
-        width: 380px;
-        height: 200px;
-    }
-    .post-content{
-        border: 2px solid red;
-        width:max-content;
-        display: flex;
-        justify-content: space-between;
-        justify-items: center;
-        align-items: stretch;
-        flex-wrap: wrap;
-        flex-direction: row;
-    }
-    .post-box{
-        display:none;
-        border: 2px solid blue;
-        max-width: max-content;
-    }
-    .create-btn{
-        text-decoration: underline;
-    }
-    .create-post:hover{
-        cursor: pointer;
-        color: blue;
-    }
-</style>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        
-//start of for propile/ pic upload
-        $('.add-pic').click(function(){
-            $('#select_img').show();
-            $('.add-pic').hide();
-            
-        })
-        $('#select_img').click(function(){
-            $('#prev').show();
-            $('#save_image').show();
-        })
-        // saving to db using ajax
-       $('#pic-form').submit(function(e){
-    e.preventDefault();  // prevent normal form submission
-
-    const formData = new FormData();
-    formData.append('profile_pic', $('#upload-pic')[0].files[0]);
-    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-
-    $.ajax({
-        url: "{% url 'update_pic' %}",
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response){
-            if(response.status === 'success') {
-                $('.profile-pic').attr('src', response.new_profile_pic_url);
-                $('#prev').hide();
-                $('#save_image').hide();
-                $('#select_img').hide();
-                $('.add-pic').show();
-                alert("Profile picture updated successfully!");
-            }
-        },
-        error:function(){
-            console.log('Upload failed');
+        :root {
+            --accent: #6f42c1;
+            --accent-dark: #5a32a3;
+            --accent-light: #ede9fb;
+            --bg: #f0f2f5;
+            --surface: #ffffff;
+            --border: #e4e6ea;
+            --text: #1c1e21;
+            --muted: #65676b;
+            --nav-h: 56px;
         }
-    });
-});
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ────────── NAV ────────── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 4px;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        nav .brand {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-right: auto;
+            letter-spacing: 0.5px;
+        }
+
+        nav a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            padding: 7px 13px;
+            border-radius: 8px;
+            transition: background 0.18s, color 0.18s;
+        }
+
+        nav a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        nav a.active { background: var(--accent); color: #fff; }
+        nav a.logout { color: #f87171; }
+        nav a.logout:hover { background: rgba(248,113,113,0.15); }
+
+        /* ────────── LAYOUT ────────── */
+        .page {
+            max-width: 680px;
+            margin: calc(var(--nav-h) + 28px) auto 48px;
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ────────── CARD ────────── */
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        /* ────────── PROFILE CARD ────────── */
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 24px;
+        }
+
+        .avatar-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .profile-pic {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-light);
+            background: #e0d9f6;
+        }
+
+        .avatar-placeholder {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #9b59b6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            font-weight: 700;
+            border: 3px solid var(--accent-light);
+        }
+
+        .edit-pic-btn {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            border: 2px solid #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            transition: background 0.2s;
+        }
+
+        .edit-pic-btn:hover { background: var(--accent-dark); }
+
+        .profile-info { flex: 1; min-width: 0; }
+
+        .profile-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .profile-bio-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .bio-text { flex: 1; }
+
+        .edit-bio-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 13px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .edit-bio-btn:hover { background: var(--accent-light); }
+
+        /* pic upload hidden elements */
+        #upload-pic { display: none; }
+        #select_img {
+            display: none;
+            font-size: 0.82rem;
+            color: var(--accent);
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 6px;
+        }
+        #prev {
+            display: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-top: 8px;
+        }
+        .save-pic-btn {
+            display: none;
+            margin-top: 8px;
+            padding: 5px 14px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            cursor: pointer;
+        }
+
+        /* bio edit row */
+        #bio-input {
+            display: none;
+            width: 100%;
+            padding: 7px 10px;
+            border: 1.5px solid var(--accent);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            margin-top: 4px;
+        }
+
+        #save-bio {
+            display: none;
+            margin-top: 6px;
+            padding: 6px 16px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #save-bio:hover { background: var(--accent-dark); }
+
+        /* ────────── POST COMPOSER ────────── */
+        .composer-trigger {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .composer-trigger:hover { background: #fafafa; }
+
+        .composer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--accent), #9b59b6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .composer-placeholder {
+            flex: 1;
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            padding: 9px 16px;
+            color: var(--muted);
+            font-size: 0.93rem;
+            font-family: inherit;
+        }
+
+        /* expanded composer */
+        .composer-box {
+            display: none;
+            padding: 0 20px 16px;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .composer-box.open { display: flex; }
+
+        .composer-box textarea {
+            width: 100%;
+            min-height: 100px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.97rem;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fafafa;
+        }
+
+        .composer-box textarea:focus { border-color: var(--accent); background: #fff; }
+
+        .composer-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .img-preview-wrap {
+            display: none;
+            position: relative;
+            width: fit-content;
+        }
+
+        .img-preview-wrap img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+        }
+
+        .remove-img {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 20px;
+            height: 20px;
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-img-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.87rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .add-img-btn:hover { background: #ddd4f8; }
+
+        .post-btn {
+            margin-left: auto;
+            padding: 9px 24px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.93rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            font-family: inherit;
+        }
+
+        .post-btn:hover { background: var(--accent-dark); transform: translateY(-1px); }
+        .post-btn:active { transform: translateY(0); }
+
+        /* ────────── MESSAGES ────────── */
+        .django-msg {
+            padding: 10px 16px;
+            background: var(--accent-light);
+            border: 1px solid #c5b8f0;
+            border-radius: 10px;
+            color: var(--accent-dark);
+            font-size: 0.9rem;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+    {% include 'cn_nav.html' %}
+
+    <div class="page">
+
+        <!-- Django messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="django-msg">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- ── PROFILE CARD ── -->
+        <div class="card">
+            <div class="profile-card">
+
+                <!-- Avatar -->
+                <div class="avatar-wrap">
+                    {% if profile.profile_pic %}
+                        <img src="{{ profile.profile_pic.url }}" alt="Profile Picture" class="profile-pic" id="profile-pic-img">
+                    {% else %}
+                        <div class="avatar-placeholder" id="avatar-placeholder">
+                            {{ user.username|first|upper }}
+                        </div>
+                    {% endif %}
+                    <button class="edit-pic-btn add-pic" title="Change photo">
+                        <i class="fa fa-camera"></i>
+                    </button>
+                </div>
+
+                <!-- Info -->
+                <div class="profile-info">
+                    <p class="profile-name">{{ user.username }}</p>
+
+                    <!-- Bio display/edit -->
+                    <form id="bio-form" method="post">
+                        {% csrf_token %}
+                        <div class="profile-bio-row" id="bio-text">
+                            <span class="bio-text" id="change-bio">
+                                {% if profile.bio %}{{ profile.bio }}{% else %}<em style="color:#aaa;">No bio yet</em>{% endif %}
+                            </span>
+                            <button type="button" class="edit-bio-btn" id="edit-bio" title="Edit bio">
+                                <i class="fa fa-pencil"></i> Edit
+                            </button>
+                        </div>
+                        <input type="text" id="bio-input" name="bio" value="{{ profile.bio }}"
+                               placeholder="Write something about yourself…">
+                        <button type="submit" id="save-bio">Save bio</button>
+                    </form>
+
+                    <!-- Pic upload controls (revealed after camera click) -->
+                    <form method="post" id="pic-form">
+                        {% csrf_token %}
+                        <label for="upload-pic" id="select_img">📷 Choose a photo</label>
+                        <input id="upload-pic" type="file" accept="image/*">
+                        <img id="prev" src="#" alt="preview">
+                        <button id="save_image" type="submit" class="save-pic-btn">Save photo</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── POST COMPOSER ── -->
+        <div class="card">
+            <!-- Collapsed trigger row -->
+            <div class="composer-trigger" id="composer-trigger">
+                <div class="composer-avatar">{{ user.username|first|upper }}</div>
+                <div class="composer-placeholder">What's on your mind, {{ user.username }}?</div>
+            </div>
+
+            <!-- Expanded composer -->
+            <div class="composer-box" id="composer-box">
+                <!-- Image preview -->
+                <div class="img-preview-wrap" id="img-preview-wrap">
+                    <img id="image" src="#" alt="preview">
+                    <button class="remove-img" id="remove-img" title="Remove image">✕</button>
+                </div>
+
+                <textarea id="about-post" placeholder="What's on your mind?"></textarea>
+
+                <div class="composer-actions">
+                    <label class="add-img-btn" for="files">
+                        <i class="fa fa-image"></i> Add photo
+                    </label>
+                    <input accept="image/*" type="file" id="files" style="display:none;">
+                    <button class="post-btn post-timeline">Post</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 
-// end of profile/ pic upload
 
-        // Show input and save button on edit
-        $('#edit-bio').click(function () {
-            $('#bio-text').hide();
-            $('#bio-input').show();
-            $('#save-bio').show();
-        });
+    <script>
+        $(document).ready(function () {
 
-        // Submit form via AJAX
-        $('#bio-form').submit(function (e) {
-            e.preventDefault();  // Prevent default form submission
-            const updatedBio = $('#bio-input').val();
-            $.ajax({
-                url: "{% url 'update_bio' %}",
-                type: "POST",
-                data: {
-                    'bio': updatedBio,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function (response) {
-                    if (response.status === 'success') {
-                        $('#change-bio').text(updatedBio);
-                        $('#bio-text').show();
-                        $('#bio-input').hide();
-                        $('#save-bio').hide();
-                        alert("Bio updated successfully!");
-                    } else {
-                        alert("Failed to update bio.");
-                    }
-                },
-                error: function () {
-                    alert("Error occurred while saving bio.");
+            // ── Composer expand/collapse ──
+            $('#composer-trigger').click(function () {
+                $(this).hide();
+                $('#composer-box').addClass('open');
+                $('#about-post').focus();
+            });
+
+            // ── Profile pic upload ──
+            $('.add-pic').click(function () {
+                $('#select_img').toggle();
+            });
+
+            $('#upload-pic').on('change', function () {
+                if (this.files[0]) {
+                    const url = URL.createObjectURL(this.files[0]);
+                    $('#prev').attr('src', url).show();
+                    $('.save-pic-btn').show();
                 }
             });
-        });
-    });
 
-    $('.create-post').click(function () {
-        $('.post-box').toggle();
-    });
-    $('#ask-img').click(function(){
-        $('#image').toggle()
-    });
-    $('.post-timeline').click(function(){
-        let formData = new FormData();
-        formData.append("img", $('#files')[0].files[0])
-        formData.append("content", $('#about-post').val())
-        let isEmpty = [...formData.entries()].length === 0;
-        console.log([...formData.entries()].length )
-        if (isEmpty){
-            alert('post can not be empty')
-        }else{
-        $.ajax({
-            url: "/timeline/post_post/",
-            type: 'POST',
-            data:formData,
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            processData: false,
-            contentType: false,
-            success: function(response){
-                alert(response.status)
-            },
-            error:function(response){
-                alert(response.status)
-            }
-        });}
-    });
-</script>
-<script>
-    document.getElementById('files').onchange = function () {
-  var src = URL.createObjectURL(this.files[0])
-  document.getElementById('image').src = src
-}
-</script>
+            $('#pic-form').submit(function (e) {
+                e.preventDefault();
+                const formData = new FormData();
+                formData.append('profile_pic', $('#upload-pic')[0].files[0]);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                $.ajax({
+                    url: "{% url 'update_pic' %}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            // Update avatar in place
+                            if ($('#profile-pic-img').length) {
+                                $('#profile-pic-img').attr('src', response.new_profile_pic_url);
+                            } else {
+                                $('#avatar-placeholder').replaceWith(
+                                    `<img src="${response.new_profile_pic_url}" class="profile-pic" id="profile-pic-img">`
+                                );
+                            }
+                            $('#prev').hide();
+                            $('.save-pic-btn').hide();
+                            $('#select_img').hide();
+                            window.cnToast('✅ Profile photo updated!');
+                        }
+                    },
+                    error: function () { window.cnToast('❌ Upload failed.'); }
+                });
+            });
+
+            // ── Bio edit ──
+            $('#edit-bio').click(function () {
+                $('#bio-text').hide();
+                $('#bio-input').show().focus();
+                $('#save-bio').show();
+            });
+
+            $('#bio-form').submit(function (e) {
+                e.preventDefault();
+                const updatedBio = $('#bio-input').val();
+                $.ajax({
+                    url: "{% url 'update_bio' %}",
+                    type: "POST",
+                    data: { 'bio': updatedBio, 'csrfmiddlewaretoken': '{{ csrf_token }}' },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            $('#change-bio').text(updatedBio || '');
+                            $('#bio-text').show();
+                            $('#bio-input').hide();
+                            $('#save-bio').hide();
+                            window.cnToast('✅ Bio updated!');
+                        } else {
+                            window.cnToast('❌ Failed to update bio.');
+                        }
+                    },
+                    error: function () { window.cnToast('❌ Error saving bio.'); }
+                });
+            });
+
+            // ── Image preview in composer ──
+            $('#files').on('change', function () {
+                if (this.files[0]) {
+                    const src = URL.createObjectURL(this.files[0]);
+                    $('#image').attr('src', src);
+                    $('#img-preview-wrap').show();
+                }
+            });
+
+            $('#remove-img').click(function () {
+                $('#files').val('');
+                $('#img-preview-wrap').hide();
+                $('#image').attr('src', '#');
+            });
+
+            // ── Post submission ──
+            $('.post-timeline').click(function () {
+                const content = $('#about-post').val().trim();
+                const imgFile = $('#files')[0].files[0];
+                if (!content && !imgFile) {
+                    window.cnToast('⚠️ Post cannot be empty.');
+                    return;
+                }
+                const formData = new FormData();
+                if (imgFile) formData.append('img', imgFile);
+                formData.append('content', content);
+
+                $.ajax({
+                    url: "/timeline/post_post/",
+                    type: 'POST',
+                    data: formData,
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        window.cnToast('✅ Post shared to timeline!');
+                        $('#about-post').val('');
+                        $('#files').val('');
+                        $('#img-preview-wrap').hide();
+                        $('#composer-box').removeClass('open');
+                        $('#composer-trigger').show();
+                    },
+                    error: function () { window.cnToast('❌ Failed to post.'); }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

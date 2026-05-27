@@ -35,7 +35,8 @@ def login_view(request):
             # messages.success(request, "You are logged in")
             return redirect("dashboard")
         else:
-            return render
+            messages.error(request, "Invalid username or password.")
+            return render(request, "accounts/login.html", {"form": form})
     else:
         form = CustomLoginForm()
         return render(request, "accounts/login.html", {"form": form})

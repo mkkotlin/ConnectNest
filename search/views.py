@@ -6,12 +6,29 @@ from accounts.models import CustomUser
 from django.db.models import Q
 from friendRequest.models import FriendRequest
 
-# Create your views here.
+
 @login_required
 def search(request):
-    pending_request = FriendRequest.objects.filter(to_user = request.user, status = 'pending')
-    print(pending_request)
-    return render(request, 'search/search.html',{'pending_request':pending_request})
+    pending_request = FriendRequest.objects.filter(to_user=request.user, status='pending')
+    return render(request, 'search/search.html', {'pending_request': pending_request})
+
+
+@login_required
+def notifications_api(request):
+    """Returns pending friend requests as JSON — used by the nav bell dropdown."""
+    pending = FriendRequest.objects.filter(
+        to_user=request.user, status='pending'
+    ).select_related('from_user').order_by('-created_at')
+
+    data = [
+        {
+            'id': fr.id,
+            'from_user': fr.from_user.username,
+            'created_at': fr.created_at.strftime('%b %d'),
+        }
+        for fr in pending
+    ]
+    return JsonResponse({'notifications': data, 'count': len(data)})
 
 
 @login_required
