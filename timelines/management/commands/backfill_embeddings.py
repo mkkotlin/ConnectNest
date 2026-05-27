@@ -31,7 +31,7 @@ class Command(BaseCommand):
             return
 
         self.stdout.write(f"Loading model…")
-        model = SentenceTransformer('all-MiniLM-L6-v2')
+        model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
         self.stdout.write(f"Encoding {total} post(s) in batches of {batch_size}…")
 
         posts = list(qs)

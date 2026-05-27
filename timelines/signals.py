@@ -7,7 +7,7 @@ def _get_model():
     """Lazy-load the SentenceTransformer to avoid importing at module level
     (which would slow down every Django startup for unrelated commands)."""
     from sentence_transformers import SentenceTransformer
-    return SentenceTransformer('all-MiniLM-L6-v2')
+    return SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
 
 
 @receiver(post_save, sender=PostModel)
