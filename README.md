@@ -16,7 +16,7 @@
 - 🤝 Friend Request System
 - 📝 Timeline & Post Sharing
 - 💬 Like & Comment Support 
-- 🔍 AI-Powered Search *(experimental)*
+- 🔍 AI-Powered Search
 - 🛠 Django Admin Control Panel
 
 ---
@@ -102,31 +102,26 @@ GitHub: @mkkotlin
 ## 🖼️ Screenshots
 
 ### 🔐 Login Page
-![Login Page](screenshots/login_page.png)
+![Login Page](image-1.png)
 
 ### 📝 Register Page
-![Register Page](screenshots/register_user.png)
+![Register Page](image.png)
 
 ### 👤 Dashboard / Profile Page
-![Dashboard or Profile](screenshots/dashboard_or_profile_page.png)
+![Dashboard or Profile](image-2.png)
 
 ### 🔍 Search & Notifications
-![Search and Notification](screenshots/search_and_notofication.png)
-
-### 🧾 Notification Requests
-![Notification Requests](screenshots/notification_requests.png)
+![Search and Notification](image-3.png)
 
 ### 🗨️ Comment Box
-![Comment Box](screenshots/comment_box.png)
+![Comment Box](image-7.png)
 
 ### 📰 Timeline View
-![Timeline Page](screenshots/timeline_page.png)
+![Timeline Page]![alt text](image-4.png)
 
 ### ➕ Create Post
-![Create Post](screenshots/create_post.png)
+![Create Post](image-5.png) 
+![Created Post](image-6.png)
 
 ### 🔗 Share Feature
 ![Share Feature](screenshots/share.png)
-
-### 📁 Project Directory Structure
-![Project Directory](screenshots/project_directory_or_structures.png)

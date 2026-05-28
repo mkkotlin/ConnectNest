@@ -1,17 +1,86 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
-<div>
-<h2>Register</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p}}
-        <button type="submit">Sign up</button>
-        {% if messages %}
-        {% for message in messages %}
-        <div>
-            {{message}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - ConnectNest</title>
+    <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
+</head>
+<body>
+    <div class="auth-container">
+        
+        <!-- Left Side: Banner -->
+        <div class="auth-banner" style="background: linear-gradient(135deg, var(--accent) 0%, #3b82f6 100%);">
+            <div class="auth-banner-content">
+                <h1>Join the Nest</h1>
+                <p>Create an account to start sharing your stories and connecting with others.</p>
+            </div>
         </div>
-        {% endfor %}
-        {% endif %}
-    </form>
-</div>
+
+        <!-- Right Side: Form -->
+        <div class="auth-form-wrapper">
+            <div class="auth-form-inner">
+                <h2>Create Account</h2>
+                <p class="auth-subtitle">Fill in the details below to get started</p>
+
+                <!-- Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            
+                            <!-- Render the input widget with our custom class -->
+                            {{ field }}
+                            
+                            {% if field.help_text %}
+                                <span class="help-text">{{ field.help_text|safe }}</span>
+                            {% endif %}
+                            
+                            {% if field.errors %}
+                                <ul class="errorlist">
+                                    {% for error in field.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn-primary">Sign Up</button>
+
+                    <div class="auth-links">
+                        <p>Already have an account? <a href="{% url 'home' %}">Log in here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Apply custom class to all form inputs automatically
+        document.querySelectorAll('input').forEach(input => {
+            if (input.type !== 'hidden' && input.type !== 'submit') {
+                input.classList.add('form-control');
+            }
+        });
+    </script>
+</body>
+</html>
