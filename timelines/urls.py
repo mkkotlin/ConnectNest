@@ -3,7 +3,7 @@ from timelines.views import like_post, timeline, add_comment, post_post, delete_
 
 urlpatterns = [
     path('like_post/<int:post_id>/', like_post, name='like_post'),
-    path('timeline/', timeline, name='timeline'),
+    path('', timeline, name='timeline'),
     path('add_comment/', add_comment, name='add_comment'),
     path('post_post/', post_post, name='post_post'),
     path('delete/<int:post_id>/', delete_post, name='delete_post'),

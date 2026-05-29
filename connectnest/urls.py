@@ -23,8 +23,8 @@ from accounts.views import login_view, profile_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("accounts/", include("accounts.urls")),
-    path("social/", include("social.urls")),
+    path("", include("accounts.urls")),
+    path("", include("social.urls")),
     path("", login_view, name="home"),
     path("search/", include("search.urls")),
     path("user/<str:username>/", profile_view, name = 'profile_view'),
